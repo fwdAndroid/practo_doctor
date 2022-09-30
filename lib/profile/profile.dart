@@ -21,17 +21,15 @@ class _ProfileState extends State<Profile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _specializationController = TextEditingController();
+  final TextEditingController _hostpitalController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
   Uint8List? _image;
 
   bool _isLoading = false;
-  var items = [
-    'Male',
-    'Female',
-  ];
-  String dropdownvalue = 'Male';
+  
   final ImagePicker _picker = ImagePicker();
   File? imageUrl;
   String imageLink = "";
@@ -48,7 +46,9 @@ class _ProfileState extends State<Profile> {
     super.dispose();
     _emailController.clear();
     _nameController.clear();
+    _specializationController.clear();
     _addressController.clear();
+    _hostpitalController.clear();
   }
 
   @override
@@ -224,7 +224,7 @@ class _ProfileState extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  'Gender',
+                  'Specialization',
                   style: GoogleFonts.getFont(
                     'Montserrat',
                     fontWeight: FontWeight.w500,
@@ -235,40 +235,95 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 10, left: 15, right: 15),
 
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Color(0xff8D8989))),
-                // margin: EdgeInsets.only(left: 25, right: 15),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: DropdownButton(
-                    isExpanded: true,
-                    underline: SizedBox(),
-                    // Initial Value
-                    value: dropdownvalue,
+                  // height: 60,
+                  margin: EdgeInsets.only(top: 10, left: 15, right: 15),
 
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
+                  //  padding: const EdgeInsets.all(3.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: new BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Color(0xff8D8989),
+                      )),
+                  // border: Border.all(color: Colors.grey,width: 0.5)
 
-                    // Array list of items
-                    items: items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalue = newValue!;
-                      });
+                  child: TextFormField(
+                    // //  textAlign: TextAlign.start,
+                    controller: _specializationController,
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return " Please Enter username..\ ";
+                      }
+
+                      return null;
                     },
+                    decoration: InputDecoration(
+                      hintText: 'My Specialization',
+                      contentPadding: EdgeInsets.only(
+                        left: 20,
+                      ),
+                      border: InputBorder.none,
+                      hintStyle: GoogleFonts.getFont('Montserrat',
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff8D8989),
+                          fontSize: 15,
+                          fontStyle: FontStyle.normal),
+                    ),
+                  )),
+                     SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Hospital Name',
+                  style: GoogleFonts.getFont(
+                    'Montserrat',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontStyle: FontStyle.normal,
                   ),
                 ),
               ),
+              Container(
+
+                  // height: 60,
+                  margin: EdgeInsets.only(top: 10, left: 15, right: 15),
+
+                  //  padding: const EdgeInsets.all(3.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: new BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Color(0xff8D8989),
+                      )),
+                  // border: Border.all(color: Colors.grey,width: 0.5)
+
+                  child: TextFormField(
+                    // //  textAlign: TextAlign.start,
+                    controller: _hostpitalController,
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return " Please Enter username..\ ";
+                      }
+
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Hospital',
+                      contentPadding: EdgeInsets.only(
+                        left: 20,
+                      ),
+                      border: InputBorder.none,
+                      hintStyle: GoogleFonts.getFont('Montserrat',
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff8D8989),
+                          fontSize: 15,
+                          fontStyle: FontStyle.normal),
+                    ),
+                  )),
               SizedBox(
                 height: 10,
               ),
@@ -366,7 +421,8 @@ class _ProfileState extends State<Profile> {
       name: _nameController.text,
       address: _addressController.text,
       file: _image!,
-      gender: dropdownvalue,
+      specialization:_specializationController.text,
+      hospital: _hostpitalController.text,
       uid: FirebaseAuth.instance.currentUser!.uid,
     );
 

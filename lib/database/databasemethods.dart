@@ -15,7 +15,8 @@ class DatabaseMethods {
     try {
       //Add User to the database with modal
       ProfileModel userModel = ProfileModel(
-        gender: '',
+        hospital: '',
+        specialization: '',
         name: '',
         uid: FirebaseAuth.instance.currentUser!.uid,
         email: '',
@@ -43,8 +44,9 @@ class DatabaseMethods {
     required String uid,
     required String name,
     required String address,
-    required String gender,
+    required String hospital,
     required Uint8List file,
+    required String specialization
   }) async {
     String res = 'Some error occured';
 
@@ -55,7 +57,8 @@ class DatabaseMethods {
         //Add User to the database with modal
 
         ProfileModel userModel = ProfileModel(
-          gender: gender,
+          hospital: hospital,
+          specialization: specialization,
           name: name,
           address: address,
           uid: FirebaseAuth.instance.currentUser!.uid,

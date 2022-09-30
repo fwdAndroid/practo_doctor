@@ -5,13 +5,15 @@ class ProfileModel {
   String address;
   String email;
   String name;
-  String gender;
+  String hospital;
+  String specialization;
   String phoneNumber;
   String photoURL;
 
   ProfileModel({
     required this.uid,
-    required this.gender,
+    required this.hospital,
+    required this.specialization,
     required this.email,
     required this.photoURL,
     required this.address,
@@ -26,8 +28,9 @@ class ProfileModel {
         'email': email,
         'phoneNumber': phoneNumber,
         'photoURL': photoURL,
-        'gender': gender,
-        'address':address
+        'specialization': specialization,
+        'address': address,
+        'hospital': hospital
       };
 
   ///
@@ -35,13 +38,13 @@ class ProfileModel {
     var snapshot = snaps.data() as Map<String, dynamic>;
 
     return ProfileModel(
-      gender: snapshot['gender'],
-      name: snapshot['name'],
-      uid: snapshot['uid'],
-      email: snapshot['email'],
-      photoURL: snapshot['photoURL'],
-      phoneNumber: snapshot['phoneNumber'],
-      address:snapshot['address']
-    );
+        specialization: snapshot['specialization'],
+        hospital: snapshot['hospital'],
+        name: snapshot['name'],
+        uid: snapshot['uid'],
+        email: snapshot['email'],
+        photoURL: snapshot['photoURL'],
+        phoneNumber: snapshot['phoneNumber'],
+        address: snapshot['address']);
   }
 }

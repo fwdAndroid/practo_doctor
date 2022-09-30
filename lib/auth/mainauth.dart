@@ -30,7 +30,7 @@ class _MainAuthState extends State<MainAuth> {
             height: 20,
           ),
           Text(
-            "Welcome To Practo Paitent",
+            "Welcome To Practo Doctor",
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
           ),
           SizedBox(
