@@ -25,7 +25,7 @@ class DatabaseMethods {
         photoURL: '',
       );
       await firebaseFirestore
-          .collection('users')
+          .collection('doctors')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
             userModel.toJson(),
@@ -68,7 +68,7 @@ class DatabaseMethods {
           photoURL: photoURL,
         );
         await firebaseFirestore
-            .collection('users')
+            .collection('doctors')
             .doc(uid)
             .update(userModel.toJson());
         res = 'success';
