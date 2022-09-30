@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:practo_doctor/doctors/appointment/appointment_detail.dart';
 import 'package:practo_doctor/doctors/favourite_doctor.dart';
 import 'package:practo_doctor/doctors/specialist_doctor.dart';
 import 'package:practo_doctor/notification/notifications.dart';
-
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({Key? key}) : super(key: key);
@@ -55,169 +55,239 @@ class _Home_ScreenState extends State<Home_Screen> {
                     )),
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => FavouriteDoctor()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
-                    width: 50,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xffE4ECFE),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Icon(
-                      Icons.favorite,
-                      color: Color(0xff1060D7),
-                      // size: 15,
-                    )),
-              ),
-            )
           ],
         ),
-        body: Form(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextField(
-                  autofocus: false,
-                  style: TextStyle(fontSize: 15.0, color: Colors.black),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green),
-                        borderRadius: BorderRadius.circular(20)),
-                    hintText: 'Search',
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey,
+        body: SingleChildScrollView(
+          child: Form(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    autofocus: false,
+                    style: TextStyle(fontSize: 15.0, color: Colors.black),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(20)),
+                      hintText: 'Search',
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.only(
+                          left: 14.0, bottom: 6.0, top: 8.0),
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.only(
-                        left: 14.0, bottom: 6.0, top: 8.0),
                   ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.35,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => Specialist_Doctor()));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 114,
-                            height: 221,
-                            decoration: BoxDecoration(
-                                color: Color(0xff4887FE),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset("asset/teeth.png"),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Specialist",
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "UpComming Appointments",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      TextButton(onPressed: () {}, child: Text("See All"))
+                    ],
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height / 5,
+                  child: ListView.builder(
+                      itemCount: 2,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Card(
+                            child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              Appointment_Detail()));
+                                },
+                                leading: Image.asset("asset/doctor.png"),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Dr.Shang chi",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.white),
+                                          fontSize: 14),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "221 Doctors",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ]),
+                                    RichText(
+                                      // Controls visual overflow
+                                      overflow: TextOverflow.clip,
+
+                                      // Controls how the text should be aligned horizontally
+                                      textAlign: TextAlign.end,
+
+                                      // Control the text direction
+                                      textDirection: TextDirection.rtl,
+
+                                      // Whether the text should break at soft line breaks
+                                      softWrap: true,
+
+                                      // Maximum number of lines for the text to span
+                                      maxLines: 1,
+
+                                      // The number of font pixels for each logical pixel
+                                      textScaleFactor: 1,
+                                      text: TextSpan(
+                                        text: 'Messaging  ',
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: const <TextSpan>[
+                                          TextSpan(
+                                              text: 'Completed',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xff55C07E))),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                      // margin: EdgeInsets.symmetric(horizontal: 10),
+                                      width: 50,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffE4ECFE),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Icon(
+                                        Icons.call,
+                                        color: Color(0xff1060D7),
+                                        // size: 15,
+                                      )),
+                                ),
+                                subtitle: Text(
+                                  "13:00-13:30 PM",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                )),
                           ),
-                        ),
-                      );
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Top Doctors",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    TextButton(onPressed: () {}, child: Text("See All"))
-                  ],
+                        );
+                      }),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xffD2D2D2)),
-                          width: 150,
-                          height: 182,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "asset/doctor.png",
-                                  fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Past Appointments",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      TextButton(onPressed: () {}, child: Text("See All"))
+                    ],
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height / 5,
+                  child: ListView.builder(
+                      itemCount: 2,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Card(
+                            child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              Appointment_Detail()));
+                                },
+                                leading: Image.asset("asset/doctor.png"),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Dr.Shang chi",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                    RichText(
+                                      // Controls visual overflow
+                                      overflow: TextOverflow.clip,
+
+                                      // Controls how the text should be aligned horizontally
+                                      textAlign: TextAlign.end,
+
+                                      // Control the text direction
+                                      textDirection: TextDirection.rtl,
+
+                                      // Whether the text should break at soft line breaks
+                                      softWrap: true,
+
+                                      // Maximum number of lines for the text to span
+                                      maxLines: 1,
+
+                                      // The number of font pixels for each logical pixel
+                                      textScaleFactor: 1,
+                                      text: TextSpan(
+                                        text: 'Messaging  ',
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: const <TextSpan>[
+                                          TextSpan(
+                                              text: 'Completed',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xff55C07E))),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "Dr.Shang chi",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                      // margin: EdgeInsets.symmetric(horizontal: 10),
+                                      width: 50,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffE4ECFE),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Icon(
+                                        Icons.call,
+                                        color: Color(0xff1060D7),
+                                        // size: 15,
+                                      )),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "Cardio Spacialist",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                              ]),
-                        ),
-                      );
-                    }),
-              ),
-            ],
+                                subtitle: Text(
+                                  "13:00-13:30 PM",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                )),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
           ),
         ));
   }

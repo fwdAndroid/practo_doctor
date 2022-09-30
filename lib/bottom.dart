@@ -46,7 +46,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(title: Text('Home'), icon: Icon(Icons.home)),
-          BottomNavyBarItem(title: Text('Appontment'), icon: Icon(Icons.apps)),
+          BottomNavyBarItem(title: Text('Details'), icon: Icon(Icons.details)),
           BottomNavyBarItem(
               title: Text('Chat'), icon: Icon(Icons.message_sharp)),
           BottomNavyBarItem(title: Text('Profile'), icon: Icon(Icons.person)),
