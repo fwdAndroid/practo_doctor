@@ -3,6 +3,7 @@ import 'package:practo_doctor/doctors/appointment/appointment_detail.dart';
 import 'package:practo_doctor/doctors/favourite_doctor.dart';
 import 'package:practo_doctor/doctors/specialist_doctor.dart';
 import 'package:practo_doctor/notification/notifications.dart';
+import 'package:practo_doctor/schdule/schedule.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({Key? key}) : super(key: key);
@@ -34,27 +35,18 @@ class _Home_ScreenState extends State<Home_Screen> {
                 fontWeight: FontWeight.w600, fontSize: 22, color: Colors.black),
           ),
           actions: [
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => Notifications()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
-                    width: 50,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xffE4ECFE),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Icon(
-                      Icons.notifications,
-                      color: Color(0xff1060D7),
-                    )),
-              ),
-            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => Schdule()));
+                },
+                child: Text("Add Schedule")),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => Notifications()));
+                },
+                child: Text("Notifications")),
           ],
         ),
         body: SingleChildScrollView(
