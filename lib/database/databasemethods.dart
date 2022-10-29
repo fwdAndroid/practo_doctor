@@ -116,7 +116,8 @@ class DatabaseMethods {
           "doctorEmail": doctorEmail,
           "doctorHospital": doctorHospital,
           "doctorSpecialization": doctorSpecialization,
-          "doctortreatedDiseacs": doctortreatedDiseacs
+          "doctortreatedDiseacs": doctortreatedDiseacs,
+          "experience": experience
         });
         res = 'success';
       }

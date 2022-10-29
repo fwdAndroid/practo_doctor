@@ -113,7 +113,10 @@ class _Edit_SettingState extends State<Edit_Setting> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.email),
+                          suffixIcon: Text(
+                            "Email",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           fillColor: Colors.white,
                           hintText: document['doctorEmail'],
                           border: inputBorder,
