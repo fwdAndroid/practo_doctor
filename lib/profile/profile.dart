@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:practo_doctor/database/databasemethods.dart';
+import 'package:practo_doctor/profile/doctor_certificates.dart';
 import 'package:practo_doctor/widgets/textfieldwidget.dart';
 import 'package:practo_doctor/widgets/utils.dart';
 
@@ -300,6 +301,8 @@ class _ProfileState extends State<Profile> {
     });
     if (rse == 'success') {
       showSnakBar(rse, context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (builder) => DoctorCertificates()));
     } else {
       showSnakBar(rse, context);
     }

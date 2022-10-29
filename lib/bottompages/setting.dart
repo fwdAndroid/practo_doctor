@@ -1,4 +1,4 @@
-// import 'package:college_meet/BottomNavigatonBar/Screens/Edit%20Profile/edit_profile.dart'
+// import 'package:college_meet/BottomNavigatonBar/Screens/Edit%20Setting/edit_Setting.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -6,8 +6,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:practo_doctor/auth/continuephone.dart';
 import 'package:practo_doctor/notification/notifications.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+class Setting extends StatelessWidget {
+  const Setting({Key? key}) : super(key: key);
   zisttile(String text, IconData icon, VoidCallback function) {
     return ListTile(
         leading: Container(
@@ -57,7 +57,7 @@ class Profile extends StatelessWidget {
           child: Image.asset("asset/Vector.png"),
         ),
         title: Text(
-          'Profile',
+          'Setting',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         actions: [
@@ -139,9 +139,9 @@ class Profile extends StatelessWidget {
               endIndent: 15,
             ),
             // ListTile()
-            zisttile('Edit Profile', Icons.person, () {
+            zisttile('Edit Setting', Icons.person, () {
               // Navigator.push(context,
-              //     MaterialPageRoute(builder: (builder) => Edit_Profile()));
+              //     MaterialPageRoute(builder: (builder) => Edit_Setting()));
             }),
             Divider(
               color: Colors.grey,
