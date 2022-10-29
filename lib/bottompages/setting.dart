@@ -2,8 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:practo_doctor/auth/continuephone.dart';
 import 'package:practo_doctor/notification/notifications.dart';
 import 'package:practo_doctor/profile/edit_setting.dart';
@@ -16,6 +15,14 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Practo Doctpr',
+        text: 'Hey: Its New App For Doctors',
+        linkUrl: 'https://play.google.com/store/apps/details',
+        chooserTitle: 'Hey: Its New App For Doctors');
+  }
+
   zisttile(String text, IconData icon, VoidCallback function) {
     return ListTile(
         onTap: function,
@@ -80,9 +87,14 @@ class _SettingState extends State<Setting> {
                     color: Color(0xffE4ECFE),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  child: Icon(
-                    Icons.edit,
-                    color: Color(0xff1060D7),
+                  child: IconButton(
+                    icon: Icon(Icons.edit, color: Color(0xff1060D7)),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => Edit_Setting()));
+                    },
                   )),
             ),
           ],
@@ -174,10 +186,8 @@ class _SettingState extends State<Setting> {
                 indent: 15,
                 endIndent: 15,
               ),
-              zisttile('Invite Friends', Icons.people, () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (builder) => Invite_Friends()));
-              }),
+
+              zisttile('Invite Friends', Icons.people, share),
               Divider(
                 color: Colors.grey,
                 thickness: 0.5,

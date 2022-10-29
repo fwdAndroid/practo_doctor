@@ -113,12 +113,10 @@ class _Edit_SettingState extends State<Edit_Setting> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          suffixIcon: Text(
-                            "Email",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          suffixIcon: Icon(Icons.email),
                           fillColor: Colors.white,
-                          hintText: document['doctorEmail'],
+                          labelText: document['doctorEmail'],
+                          hintText: 'Email',
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -135,7 +133,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.local_hospital),
                           fillColor: Colors.white,
-                          hintText: document['doctorHospital'],
+                          hintText: 'Hospital Name',
+                          labelText: document['doctorHospital'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -150,9 +149,10 @@ class _Edit_SettingState extends State<Edit_Setting> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.disabled_by_default),
+                          suffixIcon: Icon(Icons.type_specimen),
                           fillColor: Colors.white,
-                          hintText: document['doctorSpecialization'],
+                          labelText: document['doctorSpecialization'],
+                          hintText: 'Specialization',
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -169,7 +169,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.disabled_by_default),
                           fillColor: Colors.white,
-                          hintText: document['doctortreatedDiseacs'],
+                          hintText: 'Disease',
+                          labelText: document['doctortreatedDiseacs'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -186,7 +187,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.description),
                           fillColor: Colors.white,
-                          hintText: document['doctorDesc'],
+                          hintText: 'Description',
+                          labelText: document['doctorDesc'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -202,7 +204,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.home),
                           fillColor: Colors.white,
-                          hintText: document['doctorAddres'],
+                          hintText: 'Address',
+                          labelText: document['doctorAddres'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -219,7 +222,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.explore),
                           fillColor: Colors.white,
-                          hintText: document['experience'],
+                          hintText: 'Experience',
+                          labelText: document['experience'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
