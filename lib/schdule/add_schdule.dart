@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:practo_doctor/bottom.dart';
+import 'package:practo_doctor/database/databasemethods.dart';
 import 'package:practo_doctor/widgets/textfieldwidget.dart';
+import 'package:practo_doctor/widgets/utils.dart';
 
 class AddSchdule extends StatefulWidget {
   const AddSchdule({Key? key}) : super(key: key);
@@ -10,6 +14,8 @@ class AddSchdule extends StatefulWidget {
 }
 
 class _AddSchduleState extends State<AddSchdule> {
+  bool _isLoading = false;
+
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   @override
@@ -110,8 +116,12 @@ class _AddSchduleState extends State<AddSchdule> {
             height: 30,
           ),
           ElevatedButton(
-            onPressed: () {},
-            child: Text("Add"),
+            onPressed: add,
+            child: _isLoading == true
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Text("Add"),
             style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 fixedSize: Size(200, 50),
@@ -121,5 +131,30 @@ class _AddSchduleState extends State<AddSchdule> {
         ],
       ),
     );
+  }
+
+  add() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String rse = await DatabaseMethods().doctorTime(
+      uid: FirebaseAuth.instance.currentUser!.uid ,
+      day: dateController.text,
+      time: timeController.text,
+
+      // uid: FirebaseAuth.instance.currentUser!.uid,
+    );
+
+    print(rse);
+    setState(() {
+      _isLoading = false;
+    });
+    if (rse == 'success') {
+      showSnakBar(rse, context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (builder) => MobileScreenLayout()));
+    } else {
+      showSnakBar(rse, context);
+    }
   }
 }

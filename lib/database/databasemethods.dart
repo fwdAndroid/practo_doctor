@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practo_doctor/database/storage_methods.dart';
 import 'package:practo_doctor/models/profile_model.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseMethods {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -119,6 +120,30 @@ class DatabaseMethods {
           "doctortreatedDiseacs": doctortreatedDiseacs,
           "experience": experience
         });
+        res = 'success';
+      }
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  Future<String> doctorTime(
+      {required String time, required String day, required String uid}) async {
+    String res =
+        'Update all the fields data to store it because doctor information will be updated in sequences ';
+
+    try {
+      if (time.isNotEmpty && day.isNotEmpty) {
+        //Add User to the database with modal
+        String ui = Uuid().v1();
+
+        await firebaseFirestore
+            .collection("doctorTime")
+            .doc("doctorname")
+            .collection(FirebaseAuth.instance.currentUser!.uid)
+            .doc(ui)
+            .set({"time": time, "day": day, "uid": uid});
         res = 'success';
       }
     } catch (e) {
