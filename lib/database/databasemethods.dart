@@ -90,4 +90,39 @@ class DatabaseMethods {
     }
     return res;
   }
+
+  Future<String> profileUpdate({
+    required doctorAddres,
+    required doctorDesc,
+    required doctorEmail,
+    required doctorHospital,
+    required doctorSpecialization,
+    required doctortreatedDiseacs,
+    required experience,
+  }) async {
+    String res =
+        'Update all the fields data to store it because doctor information will be updated in sequences ';
+
+    try {
+      if (doctorEmail.isNotEmpty || doctorHospital.isNotEmpty) {
+        //Add User to the database with modal
+
+        await firebaseFirestore
+            .collection('doctorsprofile')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          "doctorAddres": doctorAddres,
+          "doctorDesc": doctorDesc,
+          "doctorEmail": doctorEmail,
+          "doctorHospital": doctorHospital,
+          "doctorSpecialization": doctorSpecialization,
+          "doctortreatedDiseacs": doctortreatedDiseacs
+        });
+        res = 'success';
+      }
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
 }

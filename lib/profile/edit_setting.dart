@@ -43,16 +43,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
 
   bool _isLoading = false;
 
-  final ImagePicker _picker = ImagePicker();
-  File? imageUrl;
-  String imageLink = "";
-  void getImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageUrl = File(image!.path);
-    });
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -71,6 +61,8 @@ class _Edit_SettingState extends State<Edit_Setting> {
 
   @override
   Widget build(BuildContext context) {
+    final inputBorder =
+        OutlineInputBorder(borderSide: Divider.createBorderSide(context));
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -119,59 +111,118 @@ class _Edit_SettingState extends State<Edit_Setting> {
                       SizedBox(
                         height: 10,
                       ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        runAlignment: WrapAlignment.center,
-                        children: [
-                          Text(document['doctorName']),
-                        ],
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.email),
+                          fillColor: Colors.white,
+                          hintText: document['doctorEmail'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.text,
+                        controller: doctoremailController,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['doctorHospital'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.local_hospital),
+                          fillColor: Colors.white,
+                          hintText: document['doctorHospital'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.text,
                         controller: doctorHospitalNameController,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['doctorSpecialization'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.disabled_by_default),
+                          fillColor: Colors.white,
+                          hintText: document['doctorSpecialization'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.text,
                         controller: doctorSpecializationCOntroller,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['doctortreatedDiseacs'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.disabled_by_default),
+                          fillColor: Colors.white,
+                          hintText: document['doctortreatedDiseacs'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.text,
                         controller: doctorDiseaseController,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['doctorDesc'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.description),
+                          fillColor: Colors.white,
+                          hintText: document['doctorDesc'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
                         controller: doctorDescriptionController,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['doctorAddres'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.home),
+                          fillColor: Colors.white,
+                          hintText: document['doctorAddres'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
                         controller: doctorAddressController,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormInputField(
-                        hintText: document['experience'],
-                        textInputType: TextInputType.text,
+                      TextFormField(
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.explore),
+                          fillColor: Colors.white,
+                          hintText: document['experience'],
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          filled: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
                         controller: doctorExperienceController,
                       ),
                       SizedBox(
@@ -182,28 +233,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         height: MediaQuery.of(context).size.width / 3,
                         child: Text(document['doctorDOB'] //label text of field
                             ),
-                        //set it true, so that user will not able to edit text
-                        // onTap: () async {
-                        //   DateTime? pickedDate = await showDatePicker(
-                        //       context: context,
-                        //       initialDate: DateTime.now(),
-                        //       firstDate: DateTime(1950),
-                        //       //DateTime.now() - not to allow to choose before today.
-                        //       lastDate: DateTime(2100));
-
-                        //   if (pickedDate != null) {
-                        //     print(
-                        //         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        //     String formattedDate =
-                        //         DateFormat('yyyy-MM-dd').format(pickedDate);
-                        //     print(
-                        //         formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //     setState(() {
-                        //       // doctorDateofBirthContorller.text =
-                        //       //     formattedDate; //set output date to TextField value.
-                        //     });
-                        //   } else {}
-                        // },
                       ),
                       SizedBox(
                         height: 5,
@@ -216,7 +245,7 @@ class _Edit_SettingState extends State<Edit_Setting> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(40)),
                           ),
-                          onPressed: Edit_Setting,
+                          onPressed: profileUpdates,
                           child: _isLoading == true
                               ? const Center(
                                   child: CircularProgressIndicator.adaptive(),
@@ -236,30 +265,18 @@ class _Edit_SettingState extends State<Edit_Setting> {
         ));
   }
 
-  // Select Image From Gallery
-  selectImage() async {
-    Uint8List ui = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = ui;
-    });
-  }
-
-  Edit_Setting() async {
+  profileUpdates() async {
     setState(() {
       _isLoading = true;
     });
-    String rse = await DatabaseMethods().profileDetail(
+    String rse = await DatabaseMethods().profileUpdate(
       doctortreatedDiseacs: doctorDiseaseController.text,
       doctorDesc: doctorDescriptionController.text,
-      doctorDOB: doctorDateofBirthContorller.text,
       experience: doctorExperienceController.text,
       doctorEmail: doctoremailController.text,
-      doctorName: doctornameController.text,
       doctorAddres: doctorAddressController.text,
-      file: _image!,
       doctorSpecialization: doctorSpecializationCOntroller.text,
       doctorHospital: doctorHospitalNameController.text,
-      uid: FirebaseAuth.instance.currentUser!.uid,
     );
 
     print(rse);
