@@ -15,17 +15,21 @@ class DatabaseMethods {
     try {
       //Add User to the database with modal
       ProfileModel userModel = ProfileModel(
-        hospital: '',
-        specialization: '',
-        name: '',
-        uid: FirebaseAuth.instance.currentUser!.uid,
-        email: '',
-        address: '',
-        phoneNumber: FirebaseAuth.instance.currentUser!.phoneNumber.toString(),
-        photoURL: '',
-      );
+          doctorAddres: '',
+          doctorCertificationImages: [],
+          doctorDOB: '',
+          doctorDesc: '',
+          doctorEmail: '',
+          doctorHospital: '',
+          doctorName: '',
+          doctorPhotoURL: '',
+          doctorSpecialization: '',
+          doctortreatedDiseacs: '',
+          uid: '',
+          experience: '',
+          phoneNumber: '');
       await firebaseFirestore
-          .collection('doctors')
+          .collection('doctorsprofile')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
             userModel.toJson(),
@@ -40,35 +44,42 @@ class DatabaseMethods {
 
   //Profile Details
   Future<String> profileDetail({
-    required String email,
-    required String uid,
-    required String name,
-    required String address,
-    required String hospital,
+    required doctorAddres,
+    required doctorDOB,
+    required doctorDesc,
+    required doctorEmail,
+    required doctorHospital,
+    required doctorName,
+    required doctorSpecialization,
+    required doctortreatedDiseacs,
+    required uid,
     required Uint8List file,
-    required String specialization
+    required experience,
   }) async {
     String res = 'Some error occured';
 
     try {
-      if (email.isNotEmpty || name.isNotEmpty) {
+      if (doctorEmail.isNotEmpty || doctorHospital.isNotEmpty || doctorDOB) {
         String photoURL = await StorageMethods()
             .uploadImageToStorage('ProfilePics', file, false);
         //Add User to the database with modal
 
         ProfileModel userModel = ProfileModel(
-          hospital: hospital,
-          specialization: specialization,
-          name: name,
-          address: address,
-          uid: FirebaseAuth.instance.currentUser!.uid,
-          email: email,
-          phoneNumber:
-              FirebaseAuth.instance.currentUser!.phoneNumber.toString(),
-          photoURL: photoURL,
-        );
+            uid: uid,
+            experience: experience,
+            doctorAddres: doctorAddres,
+            doctorDOB: doctorDOB,
+            doctorDesc: doctorDesc,
+            doctorEmail: doctorEmail,
+            doctorHospital: doctorHospital,
+            doctorName: doctorName,
+            doctorPhotoURL: photoURL,
+            doctorSpecialization: doctorSpecialization,
+            doctortreatedDiseacs: doctortreatedDiseacs,
+            phoneNumber:
+                FirebaseAuth.instance.currentUser!.phoneNumber.toString());
         await firebaseFirestore
-            .collection('doctors')
+            .collection('doctorsprofile')
             .doc(uid)
             .update(userModel.toJson());
         res = 'success';

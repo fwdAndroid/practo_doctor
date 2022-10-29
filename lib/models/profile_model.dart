@@ -1,36 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//Modal Need to Be Created in profile Page is
+// Disear Name which he trated,
+// experience,
+
 class ProfileModel {
   String uid;
-  String address;
-  String email;
-  String name;
-  String hospital;
-  String specialization;
+  String doctorAddres;
+  String doctorEmail;
+  String doctorDOB;
+  String doctorName;
+  String doctorDesc;
+  String doctorHospital;
+  String doctorSpecialization;
   String phoneNumber;
-  String photoURL;
+  String doctorPhotoURL;
+  List<String>? doctorCertificationImages;
+  String doctortreatedDiseacs;
+  String experience;
 
   ProfileModel({
     required this.uid,
-    required this.hospital,
-    required this.specialization,
-    required this.email,
-    required this.photoURL,
-    required this.address,
-    required this.name,
+    required this.doctorHospital,
+    required this.doctorSpecialization,
+    required this.doctorEmail,
+    required this.doctorPhotoURL,
+    required this.doctorAddres,
+    required this.doctorName,
+    required this.experience,
+    this.doctorCertificationImages,
+    required this.doctorDOB,
+    required this.doctorDesc,
+    required this.doctortreatedDiseacs,
     required this.phoneNumber,
   });
 
   ///Converting OBject into Json Object
   Map<String, dynamic> toJson() => {
-        'name': name,
+        'doctorName': doctorName,
+        'experience': experience,
+        'doctorDOB': doctorDOB,
+        'doctorDesc': doctorDesc,
+        'doctortreatedDiseacs': doctortreatedDiseacs,
+        'doctorCertificationImages': doctorCertificationImages,
         'uid': uid,
-        'email': email,
+        'doctorEmail': doctorEmail,
         'phoneNumber': phoneNumber,
-        'photoURL': photoURL,
-        'specialization': specialization,
-        'address': address,
-        'hospital': hospital
+        'doctorPhotoURL': doctorPhotoURL,
+        'doctorSpecialization': doctorSpecialization,
+        'doctorAddres': doctorAddres,
+        'doctorHospital': doctorHospital
       };
 
   ///
@@ -38,13 +57,19 @@ class ProfileModel {
     var snapshot = snaps.data() as Map<String, dynamic>;
 
     return ProfileModel(
-        specialization: snapshot['specialization'],
-        hospital: snapshot['hospital'],
-        name: snapshot['name'],
-        uid: snapshot['uid'],
-        email: snapshot['email'],
-        photoURL: snapshot['photoURL'],
-        phoneNumber: snapshot['phoneNumber'],
-        address: snapshot['address']);
+      doctorName: snapshot['doctorName'],
+      experience: snapshot['experience'],
+      doctorDOB: snapshot['doctorDOB'],
+      uid: snapshot['uid'],
+      doctorDesc: snapshot['doctorDesc'],
+      doctortreatedDiseacs: snapshot['doctortreatedDiseacs'],
+      doctorCertificationImages: snapshot['doctorCertificationImages'],
+      doctorEmail: snapshot['doctorEmail'],
+      phoneNumber: snapshot['phoneNumber'],
+      doctorPhotoURL: snapshot['doctorPhotoURL'],
+      doctorSpecialization: snapshot['doctorSpecialization'],
+      doctorAddres: snapshot['doctorAddres'],
+      doctorHospital: snapshot['doctorHospital'],
+    );
   }
 }
