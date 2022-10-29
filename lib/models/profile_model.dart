@@ -28,7 +28,7 @@ class ProfileModel {
     required this.doctorAddres,
     required this.doctorName,
     required this.experience,
-    this.doctorCertificationImages,
+    required this.doctorCertificationImages,
     required this.doctorDOB,
     required this.doctorDesc,
     required this.doctortreatedDiseacs,

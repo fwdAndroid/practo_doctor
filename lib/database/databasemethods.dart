@@ -65,6 +65,7 @@ class DatabaseMethods {
         //Add User to the database with modal
 
         ProfileModel userModel = ProfileModel(
+            doctorCertificationImages: [],
             uid: uid,
             experience: experience,
             doctorAddres: doctorAddres,
