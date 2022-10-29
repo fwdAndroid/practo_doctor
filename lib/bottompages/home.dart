@@ -40,7 +40,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (builder) => Schdule()));
                 },
-                child: Text("Add Schedule")),
+                child: Text("Schedule")),
             TextButton(
                 onPressed: () {
                   Navigator.push(context,
