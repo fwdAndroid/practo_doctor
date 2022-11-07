@@ -8,18 +8,19 @@ class SchduleModel {
   String uid;
   String time;
   String day;
-
+  String? uuid;
   SchduleModel({
     required this.uid,
     required this.time,
     required this.day,
+    required this.uuid,
   });
 
   ///Converting OBject into Json Object
   Map<String, dynamic> toJson() => {
         'time': time,
         'day': day,
-        'uid': uid,
+        'uuid': uuid,
       };
 
   ///
@@ -30,6 +31,7 @@ class SchduleModel {
       time: snapshot['time'],
       day: snapshot['day'],
       uid: snapshot['uid'],
+      uuid: snapshot['uuid'],
     );
   }
 }

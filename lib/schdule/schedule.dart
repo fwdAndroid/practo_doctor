@@ -55,19 +55,20 @@ class _SchduleState extends State<Schdule> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 return ListTile(
-                  title: Text(data['time'] + "DH"),
+                  title: Text(data['time']),
                   subtitle: Text(data['day']),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.red,
                     ),
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
+                    onPressed: () {
+                      print("Bt");
+                      FirebaseFirestore.instance
                           .collection("doctorTime")
                           .doc("doctorname")
                           .collection(FirebaseAuth.instance.currentUser!.uid)
-                          .doc(id)
+                          .doc(data["time"])
                           .delete();
                     },
                   ),

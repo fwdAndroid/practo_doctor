@@ -5,6 +5,7 @@ import 'package:practo_doctor/bottom.dart';
 import 'package:practo_doctor/database/databasemethods.dart';
 import 'package:practo_doctor/widgets/textfieldwidget.dart';
 import 'package:practo_doctor/widgets/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class AddSchdule extends StatefulWidget {
   const AddSchdule({Key? key}) : super(key: key);
@@ -134,14 +135,15 @@ class _AddSchduleState extends State<AddSchdule> {
   }
 
   add() async {
+    String ui = Uuid().v1();
+
     setState(() {
       _isLoading = true;
     });
     String rse = await DatabaseMethods().doctorTime(
-      uid: FirebaseAuth.instance.currentUser!.uid ,
+      uid: FirebaseAuth.instance.currentUser!.uid,
       day: dateController.text,
       time: timeController.text,
-
       // uid: FirebaseAuth.instance.currentUser!.uid,
     );
 

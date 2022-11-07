@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:practo_doctor/database/storage_methods.dart';
 import 'package:practo_doctor/models/profile_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:practo_doctor/models/schdule_model.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -145,26 +146,62 @@ class DatabaseMethods {
     return res;
   }
 
+//   Future<String> doctorTime({
+//     required String time,
+//     required String day,
+//     required String uid,
+//     required uuid,
+//   }) async {
+
+//     ;
+//     try {
+//       if (time.isNotEmpty || day.isNotEmpty) {
+//         // String servicId = Uuid().v1();
+
+//         SchduleModel serviceModel = SchduleModel(
+//           time: time,
+//           day: day,
+//           uid: uid,
+//           uuid: uuid,
+//         );
+
+//             );
+//         res = 'Success';
+//       }
+//     } catch (error) {
+//       res = error.toString();
+//     }
+//     return res;
+//   }
+// }
+//Add Service
   Future<String> doctorTime(
       {required String time, required String day, required String uid}) async {
     String res =
         'Update all the fields data to store it because doctor information will be updated in sequences ';
-
     try {
-      if (time.isNotEmpty && day.isNotEmpty) {
-        //Add User to the database with modal
-        String ui = Uuid().v1();
+      if (time.isNotEmpty || day.isNotEmpty) {
+        String uuid = Uuid().v1();
 
-        await firebaseFirestore
-            .collection("doctorTime")
+        SchduleModel serviceModel = SchduleModel(
+          time: time,
+          day: day,
+          uid: uid,
+          uuid: uuid,
+        );
+
+        firebaseFirestore
+            .collection('doctorTime')
             .doc("doctorname")
             .collection(FirebaseAuth.instance.currentUser!.uid)
-            .doc(ui)
-            .set({"time": time, "day": day, "uid": uid});
-        res = 'success';
+            .doc(uuid)
+            .set(
+              serviceModel.toJson(),
+            );
+        res = 'Success';
       }
-    } catch (e) {
-      res = e.toString();
+    } catch (error) {
+      res = error.toString();
     }
     return res;
   }
