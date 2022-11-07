@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practo_doctor/tab/past_appointment.dart';
 import 'package:practo_doctor/tab/upcomming_appointment.dart';
@@ -33,122 +35,38 @@ class _AppointmentState extends State<Appointment>
         ),
         backgroundColor: Colors.white,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Full Name",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: TextField(
-              autofocus: false,
-              style: TextStyle(fontSize: 15.0, color: Colors.black),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
-                    borderRadius: BorderRadius.circular(20)),
-                hintText: 'Full Name',
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Select Age Range",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: 120,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xff1060D7),
-                      ),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: Text(
-                      "10+",
-                      style: TextStyle(
-                          color: Color(0xff1060D7),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 120,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xff1060D7),
-                      ),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: Text(
-                      "20+",
-                      style: TextStyle(
-                          color: Color(0xff1060D7),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 120,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xff1060D7),
-                      ),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: Text(
-                      "50+",
-                      style: TextStyle(
-                          color: Color(0xff1060D7),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+      body: StreamBuilder<Object>(
+          stream: FirebaseFirestore.instance
+              .collection("doctorsprofile")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .snapshots(),
+          builder: (context, AsyncSnapshot snapshot) {
+            var ds = snapshot.data;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Phone Number:",
+                    "Full Name",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    ds['doctorName'],
+                  ),
+                ),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Select Age Range",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -158,89 +76,157 @@ class _AppointmentState extends State<Appointment>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "+923048214235",
+                    ds['doctorDOB'],
                     style: TextStyle(
                         color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         fontSize: 18),
                   ),
                 ),
+                Divider(),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Phone Number:",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ds['phoneNumber'],
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Specialization:",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ds['doctorSpecialization'],
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(),
+
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "About Doctor",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      ds['doctorDesc'],
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                Divider(),
+
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Certificates",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 210,
+                  padding: EdgeInsets.all(4),
+                  child: GridView.builder(
+                      itemCount: ds['doctorCertificationImages'].length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          height: 210,
+                          margin: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      ds['doctorCertificationImages'][index]),
+                                  fit: BoxFit.cover)),
+                        );
+                      }),
+                ),
+
+                // Spacer(),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Center(
+                //     child: Container(
+                //       margin: EdgeInsets.only(bottom: 20),
+                //       child: ElevatedButton(
+                //           onPressed: () {
+                //             // Navigator.push(context,
+                //             //     MaterialPageRoute(builder: (builder) => Payment()));
+                //           },
+                //           child: Text('Save'),
+                //           style: ElevatedButton.styleFrom(
+                //               shape: StadiumBorder(),
+                //               primary: Color(0xfff0092E1),
+                //               fixedSize: Size(330, 50))),
+                //     ),
+                //   ),
+                // ),
               ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Specialization:",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Child Specialist",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "About Doctor",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              minLines: 2,
-              maxLines: 5,
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
-                hintText: 'Write Your Problem',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                ),
-              ),
-            ),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (builder) => Payment()));
-                    },
-                    child: Text('Save'),
-                    style: ElevatedButton.styleFrom(
-                        shape: StadiumBorder(),
-                        primary: Color(0xfff0092E1),
-                        fixedSize: Size(330, 50))),
-              ),
-            ),
-          ),
-        ],
-      ),
+            );
+          }),
     );
   }
 }

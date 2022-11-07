@@ -128,10 +128,30 @@ class _ProfileState extends State<Profile> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            "Upload photo profile",
-                            style: TextStyle(color: Colors.grey),
-                          )
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Upload photo profile',
+                                style: GoogleFonts.getFont(
+                                  'Montserrat',
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.normal,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '*',
+                                      style: GoogleFonts.getFont(
+                                        'Montserrat',
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                        fontStyle: FontStyle.normal,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -139,6 +159,32 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter UserName ',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormInputField(
                   hintText: 'Enter your username',
@@ -148,6 +194,32 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Email ',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 TextFormInputField(
                   hintText: 'Enter your email',
                   textInputType: TextInputType.emailAddress,
@@ -155,6 +227,32 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Hospital Name ',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormInputField(
                   hintText: 'Enter your hospital name',
@@ -164,6 +262,32 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Specialization',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 TextFormInputField(
                   hintText: 'Enter your specialization',
                   textInputType: TextInputType.text,
@@ -171,6 +295,32 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Disease Specialized ',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormInputField(
                   hintText: 'Enter List of disease user treated',
@@ -180,6 +330,32 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Description',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 TextFormInputField(
                   hintText: 'Doctor Description',
                   textInputType: TextInputType.text,
@@ -188,6 +364,32 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   height: 10,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Address ',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 TextFormInputField(
                   hintText: 'Enter Doctor Address',
                   textInputType: TextInputType.text,
@@ -195,6 +397,32 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Enter Experience',
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '*',
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontStyle: FontStyle.normal,
+                            )),
+                      ],
+                    ),
+                  ),
                 ),
                 TextFormInputField(
                   hintText: 'Enter Doctor Experience',
