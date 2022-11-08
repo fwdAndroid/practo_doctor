@@ -68,7 +68,7 @@ class _SchduleState extends State<Schdule> {
                           .collection("doctorTime")
                           .doc("doctorname")
                           .collection(FirebaseAuth.instance.currentUser!.uid)
-                          .doc(data["time"])
+                          .doc(data["uuid"])
                           .delete();
                     },
                   ),
