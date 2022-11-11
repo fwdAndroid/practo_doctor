@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practo_doctor/appointments/appointments_tabs.dart';
 import 'package:practo_doctor/notification/notifications.dart';
@@ -78,7 +79,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "UpComming Appointments",
+                        "Upcoming Appointments",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,
@@ -89,200 +90,81 @@ class _Home_ScreenState extends State<Home_Screen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (builder) => AppointmentsTabssTabs()));
+                                    builder: (builder) =>
+                                        AppointmentsTabssTabs()));
                           },
                           child: Text("See All"))
                     ],
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height / 5,
-                  child: ListView.builder(
-                      itemCount: 2,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Card(
-                            child: ListTile(
-                                onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (builder) =>
-                                  //             Appointment_Detail()));
-                                },
-                                leading: Image.asset("asset/doctor.png"),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Dr.Shang chi",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                    RichText(
-                                      // Controls visual overflow
-                                      overflow: TextOverflow.clip,
-
-                                      // Controls how the text should be aligned horizontally
-                                      textAlign: TextAlign.end,
-
-                                      // Control the text direction
-                                      textDirection: TextDirection.rtl,
-
-                                      // Whether the text should break at soft line breaks
-                                      softWrap: true,
-
-                                      // Maximum number of lines for the text to span
-                                      maxLines: 1,
-
-                                      // The number of font pixels for each logical pixel
-                                      textScaleFactor: 1,
-                                      text: TextSpan(
-                                        text: 'Messaging  ',
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: const <TextSpan>[
-                                          TextSpan(
-                                              text: 'Completed',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xff55C07E))),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                    height: MediaQuery.of(context).size.height,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('appointments')
+                            // .where(
+                            //   'status',
+                            //   isNotEqualTo: 'pending',
+                            // )
+                            .where('status', isEqualTo: "approve")
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshot) {
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text('Something went wrong'),
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                // Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: Text(
+                                //     '29 Decemeber 2002',
+                                //     textAlign: TextAlign.start,
+                                //     style:
+                                //         TextStyle(color: Colors.black, fontWeight: FontWeight.w900),
+                                //   ),
+                                // ),
+                                Container(
+                                  height: MediaQuery.of(context).size.height,
+                                  child: ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        Map<String, dynamic> snap =
+                                            snapshot.data!.docs[index].data()
+                                                as Map<String, dynamic>;
+                                        return Column(
+                                          children: [
+                                            ListTile(
+                                              onTap: () {
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //     builder: (builder) =>
+                                                //         AppointCurrentDetail(),
+                                                //   ),
+                                                // );
+                                              },
+                                              title: Text(snap['name']),
+                                              subtitle: Text(snap['problem']),
+                                            ),
+                                            Divider()
+                                          ],
+                                        );
+                                      }),
                                 ),
-                                trailing: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Container(
-                                      // margin: EdgeInsets.symmetric(horizontal: 10),
-                                      width: 50,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffE4ECFE),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                      ),
-                                      child: Icon(
-                                        Icons.call,
-                                        color: Color(0xff1060D7),
-                                        // size: 15,
-                                      )),
-                                ),
-                                subtitle: Text(
-                                  "13:00-13:30 PM",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12),
-                                )),
-                          ),
-                        );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Past Appointments",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      TextButton(onPressed: () {}, child: Text("See All"))
-                    ],
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height / 5,
-                  child: ListView.builder(
-                      itemCount: 2,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Card(
-                            child: ListTile(
-                                onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (builder) =>
-                                  //             Appointment_Detail()));
-                                },
-                                leading: Image.asset("asset/doctor.png"),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Dr.Shang chi",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                    RichText(
-                                      // Controls visual overflow
-                                      overflow: TextOverflow.clip,
-
-                                      // Controls how the text should be aligned horizontally
-                                      textAlign: TextAlign.end,
-
-                                      // Control the text direction
-                                      textDirection: TextDirection.rtl,
-
-                                      // Whether the text should break at soft line breaks
-                                      softWrap: true,
-
-                                      // Maximum number of lines for the text to span
-                                      maxLines: 1,
-
-                                      // The number of font pixels for each logical pixel
-                                      textScaleFactor: 1,
-                                      text: TextSpan(
-                                        text: 'Messaging  ',
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: const <TextSpan>[
-                                          TextSpan(
-                                              text: 'Completed',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xff55C07E))),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                trailing: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Container(
-                                      // margin: EdgeInsets.symmetric(horizontal: 10),
-                                      width: 50,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffE4ECFE),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                      ),
-                                      child: Icon(
-                                        Icons.call,
-                                        color: Color(0xff1060D7),
-                                        // size: 15,
-                                      )),
-                                ),
-                                subtitle: Text(
-                                  "13:00-13:30 PM",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12),
-                                )),
-                          ),
-                        );
-                      }),
-                ),
+                              ],
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          }
+                        })),
               ],
             ),
           ),

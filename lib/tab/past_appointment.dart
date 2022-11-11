@@ -109,7 +109,6 @@ class _PastState extends State<Past> {
                       ),
                     ),
                   ),
-                  
                 ],
               ),
       ),
