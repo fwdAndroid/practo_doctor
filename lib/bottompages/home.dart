@@ -89,7 +89,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (builder) => AppointmentsTabs()));
+                                    builder: (builder) => AppointmentsTabssTabs()));
                           },
                           child: Text("See All"))
                     ],

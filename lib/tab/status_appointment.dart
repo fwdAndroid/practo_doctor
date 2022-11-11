@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class UpComing extends StatefulWidget {
-  const UpComing({Key? key}) : super(key: key);
+class StatusAppointment extends StatefulWidget {
+  const StatusAppointment({super.key});
 
   @override
-  State<UpComing> createState() => _UpComingState();
+  State<StatusAppointment> createState() => _StatusAppointmentState();
 }
 
-class _UpComingState extends State<UpComing> {
+class _StatusAppointmentState extends State<StatusAppointment> {
+  var id;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class _UpComingState extends State<UpComing> {
                     //   'status',
                     //   isNotEqualTo: 'pending',
                     // )
-                    .where('status', isEqualTo: "approve")
+                    .where('status', isEqualTo: "pending")
                     .snapshots(),
                 builder: (context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -68,6 +69,34 @@ class _UpComingState extends State<UpComing> {
                                       },
                                       title: Text(snap['name']),
                                       subtitle: Text(snap['problem']),
+                                      trailing: Column(
+                                        children: [
+                                          Expanded(
+                                            child: IconButton(
+                                              onPressed: () async {
+                                                await approveAppointment(id);
+                                              },
+                                              icon: Icon(
+                                                Icons.check,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                cancelAppointment(
+                                                    key: "status",
+                                                    value: "cancel");
+                                              },
+                                              icon: Icon(
+                                                Icons.close,
+                                                color: Colors.redAccent,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     Divider()
                                   ],
@@ -82,37 +111,56 @@ class _UpComingState extends State<UpComing> {
                     );
                   }
                 })
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      "asset/no.png",
-                      width: 270,
-                      height: 260,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        "You Dont Have Appointment",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  
-                ],
+            : const Center(
+                child: Text('No Appointment Approval is needed'),
               ),
       ),
     );
+  }
+
+  //Update Functions
+
+  Future<String> approveAppointment(String id) async {
+    String res = 'Some error occured';
+    debugPrint(res);
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(id)
+          .update({
+        "status": "approve",
+      });
+      res = 'success';
+      debugPrint(res);
+    } on FirebaseException catch (e) {
+      res = e.toString();
+      debugPrint(res);
+    }
+    return res;
+  }
+
+  //cancle
+  Future<String> cancelAppointment({
+    required String key,
+    required String value,
+  }) async {
+    String res = 'Some error occured';
+    debugPrint(res);
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          .doc(id)
+          .update({
+        key: value,
+      });
+      res = 'success';
+      debugPrint(res);
+    } on FirebaseException catch (e) {
+      res = e.toString();
+      debugPrint(res);
+    }
+    return res;
   }
 }
