@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practo_doctor/doctors/appointment/appointment_detail.dart';
-import 'package:practo_doctor/doctors/favourite_doctor.dart';
-import 'package:practo_doctor/doctors/specialist_doctor.dart';
+import 'package:practo_doctor/appointments/appointments_tabs.dart';
 import 'package:practo_doctor/notification/notifications.dart';
 import 'package:practo_doctor/schdule/schedule.dart';
 
@@ -86,7 +84,14 @@ class _Home_ScreenState extends State<Home_Screen> {
                             fontSize: 17,
                             fontWeight: FontWeight.w600),
                       ),
-                      TextButton(onPressed: () {}, child: Text("See All"))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => AppointmentsTabs()));
+                          },
+                          child: Text("See All"))
                     ],
                   ),
                 ),
@@ -100,11 +105,11 @@ class _Home_ScreenState extends State<Home_Screen> {
                           child: Card(
                             child: ListTile(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              Appointment_Detail()));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (builder) =>
+                                  //             Appointment_Detail()));
                                 },
                                 leading: Image.asset("asset/doctor.png"),
                                 title: Column(
@@ -202,11 +207,11 @@ class _Home_ScreenState extends State<Home_Screen> {
                           child: Card(
                             child: ListTile(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              Appointment_Detail()));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (builder) =>
+                                  //             Appointment_Detail()));
                                 },
                                 leading: Image.asset("asset/doctor.png"),
                                 title: Column(

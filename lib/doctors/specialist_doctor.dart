@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:practo_doctor/doctors/appointment/doctor_appointment.dart';
 
 class Specialist_Doctor extends StatefulWidget {
   const Specialist_Doctor({Key? key}) : super(key: key);
@@ -25,10 +24,10 @@ class _Specialist_DoctorState extends State<Specialist_Doctor> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => Doctor_Appointment()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (builder) => Doctor_Appointment()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
