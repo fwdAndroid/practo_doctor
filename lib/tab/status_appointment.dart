@@ -93,7 +93,15 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                           ),
                                           Expanded(
                                             child: IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                print(documentSnapshot);
+                                                await FirebaseFirestore.instance
+                                                    .collection('appointments')
+                                                    .doc("details")
+                                                    .collection("records")
+                                                    .doc(documentSnapshot.id)
+                                                    .delete();
+                                              },
                                               icon: Icon(
                                                 Icons.close,
                                                 color: Colors.redAccent,
