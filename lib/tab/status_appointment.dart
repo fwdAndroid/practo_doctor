@@ -80,8 +80,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                     .collection("records")
                                                     .doc(documentSnapshot!.id)
                                                     .update({
-                                                  "status": "Aawad",
-                                                  "age": "34"
+                                                  "status": "start",
                                                 });
                                                 print("ass");
                                               },

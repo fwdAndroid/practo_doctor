@@ -22,16 +22,14 @@ class _UpComingState extends State<UpComing> {
                     .collection('appointments')
                     .doc("details")
                     .collection("records")
-
-                    // .where(
-                    //   'status',
-                    //   isNotEqualTo: 'pending',
-                    // )
+                    .where(
+                      'status',
+                      isEqualTo: 'start',
+                    )
                     .where('doctorid',
                         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                    .where("status", isEqualTo: "start")
-                    .snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
+                    .snapshots(includeMetadataChanges: true),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
@@ -56,23 +54,15 @@ class _UpComingState extends State<UpComing> {
                           child: ListView.builder(
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (BuildContext context, int index) {
-                                Map<String, dynamic> snap =
-                                    snapshot.data!.docs[index].data()
-                                        as Map<String, dynamic>;
+                                final DocumentSnapshot documentSnapshot =
+                                    snapshot.data!.docs[index];
+
                                 return Column(
                                   children: [
                                     ListTile(
-                                      onTap: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (builder) =>
-                                        //         AppointCurrentDetail(),
-                                        //   ),
-                                        // );
-                                      },
-                                      title: Text(snap['name']),
-                                      subtitle: Text(snap['problem']),
+                                      title: Text(documentSnapshot['name']),
+                                      subtitle:
+                                          Text(documentSnapshot['problem']),
                                     ),
                                     Divider()
                                   ],
