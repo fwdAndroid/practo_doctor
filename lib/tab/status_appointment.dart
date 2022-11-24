@@ -3,16 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:uuid/uuid.dart';
 
 class StatusAppointment extends StatefulWidget {
-  const StatusAppointment({super.key});
+  StatusAppointment({
+    super.key,
+  });
 
   @override
   State<StatusAppointment> createState() => _StatusAppointmentState();
 }
 
 class _StatusAppointmentState extends State<StatusAppointment> {
-  var id;
+  var doctorID;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,21 +24,25 @@ class _StatusAppointmentState extends State<StatusAppointment> {
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('appointments')
+                    .doc("details")
+                    .collection("records")
+
                     // .where(
                     //   'status',
                     //   isNotEqualTo: 'pending',
                     // )
-                    .where('status', isEqualTo: "pending")
-                    .snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
+                    .where('doctorid',
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(includeMetadataChanges: true),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
                       child: Text('Something went wrong'),
                     );
                   }
                   if (snapshot.hasData) {
+                    print("working");
                     return Column(
                       children: [
                         // Padding(
@@ -52,29 +59,31 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                           child: ListView.builder(
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (BuildContext context, int index) {
-                                Map<String, dynamic> snap =
-                                    snapshot.data!.docs[index].data()
-                                        as Map<String, dynamic>;
+                                final DocumentSnapshot documentSnapshot =
+                                    snapshot.data!.docs[index];
+
                                 return Column(
                                   children: [
                                     ListTile(
-                                      onTap: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (builder) =>
-                                        //         AppointCurrentDetail(),
-                                        //   ),
-                                        // );
-                                      },
-                                      title: Text(snap['name']),
-                                      subtitle: Text(snap['problem']),
+                                      title: Text(documentSnapshot['name']),
+                                      subtitle:
+                                          Text(documentSnapshot['problem']),
                                       trailing: Column(
                                         children: [
                                           Expanded(
                                             child: IconButton(
                                               onPressed: () async {
-                                                await approveAppointment(id);
+                                                print(documentSnapshot);
+                                                await FirebaseFirestore.instance
+                                                    .collection('appointments')
+                                                    .doc("details")
+                                                    .collection("records")
+                                                    .doc(documentSnapshot!.id)
+                                                    .update({
+                                                  "status": "Aawad",
+                                                  "age": "34"
+                                                });
+                                                print("ass");
                                               },
                                               icon: Icon(
                                                 Icons.check,
@@ -84,11 +93,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                           ),
                                           Expanded(
                                             child: IconButton(
-                                              onPressed: () {
-                                                cancelAppointment(
-                                                    key: "status",
-                                                    value: "cancel");
-                                              },
+                                              onPressed: () {},
                                               icon: Icon(
                                                 Icons.close,
                                                 color: Colors.redAccent,
@@ -106,6 +111,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                       ],
                     );
                   } else {
+                    print("Not Working");
                     return const Center(
                       child: CircularProgressIndicator.adaptive(),
                     );
@@ -117,50 +123,9 @@ class _StatusAppointmentState extends State<StatusAppointment> {
       ),
     );
   }
+// complete
+// pending
+// start
+  // //Update Functions
 
-  //Update Functions
-
-  Future<String> approveAppointment(String id) async {
-    String res = 'Some error occured';
-    debugPrint(res);
-
-    try {
-      await FirebaseFirestore.instance
-          .collection('appointments')
-          .doc(id)
-          .update({
-        "status": "approve",
-      });
-      res = 'success';
-      debugPrint(res);
-    } on FirebaseException catch (e) {
-      res = e.toString();
-      debugPrint(res);
-    }
-    return res;
-  }
-
-  //cancle
-  Future<String> cancelAppointment({
-    required String key,
-    required String value,
-  }) async {
-    String res = 'Some error occured';
-    debugPrint(res);
-
-    try {
-      await FirebaseFirestore.instance
-          .collection('appointments')
-          .doc(id)
-          .update({
-        key: value,
-      });
-      res = 'success';
-      debugPrint(res);
-    } on FirebaseException catch (e) {
-      res = e.toString();
-      debugPrint(res);
-    }
-    return res;
-  }
 }

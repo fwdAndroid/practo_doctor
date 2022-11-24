@@ -13,6 +13,9 @@ Future<void> main() async {
   );
 }
 
+// namecontroller.text = doc['dasd'];  For SHowing Data on UPdate
+
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

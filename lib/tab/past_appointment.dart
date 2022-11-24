@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:uuid/uuid.dart';
 
 class Past extends StatefulWidget {
   const Past({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class Past extends StatefulWidget {
 }
 
 class _PastState extends State<Past> {
+  var id = Uuid().v1();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,21 +22,26 @@ class _PastState extends State<Past> {
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('appointments')
+                    .doc("details")
+                    .collection("records")
+
                     // .where(
                     //   'status',
                     //   isNotEqualTo: 'pending',
                     // )
-                    .where('status', isEqualTo: "cancel")
+                    .where('doctorid',
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .where("status", isEqualTo: "complete")
                     .snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
+                builder: (context, AsyncSnapshot snapshot) {
+                  print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
                       child: Text('Something went wrong'),
                     );
                   }
                   if (snapshot.hasData) {
+                    print("working");
                     return Column(
                       children: [
                         // Padding(
@@ -77,39 +84,14 @@ class _PastState extends State<Past> {
                       ],
                     );
                   } else {
+                    print("Not Working");
                     return const Center(
                       child: CircularProgressIndicator.adaptive(),
                     );
                   }
                 })
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      "asset/no.png",
-                      width: 270,
-                      height: 260,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        "You Dont Have Appointment",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ],
+            : const Center(
+                child: Text('No Appointment Approval is needed'),
               ),
       ),
     );

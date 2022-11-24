@@ -4,7 +4,7 @@ import 'package:practo_doctor/tab/status_appointment.dart';
 import 'package:practo_doctor/tab/upcomming_appointment.dart';
 
 class AppointmentsTabssTabs extends StatefulWidget {
-  const AppointmentsTabssTabs({super.key});
+  AppointmentsTabssTabs({super.key});
 
   @override
   State<AppointmentsTabssTabs> createState() => _AppointmentsTabssTabsState();
@@ -29,7 +29,7 @@ class _AppointmentsTabssTabsState extends State<AppointmentsTabssTabs>
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Text(
-          'My AppointmentsTabssTabs',
+          'My Appointments',
           style: TextStyle(color: Colors.black),
         ),
         bottom: TabBar(
@@ -51,7 +51,13 @@ class _AppointmentsTabssTabsState extends State<AppointmentsTabssTabs>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const <Widget>[StatusAppointment(), UpComing(), Past()],
+        children: <Widget>[
+          StatusAppointment(
+            
+          ),
+          UpComing(),
+          Past()
+        ],
       ),
     );
   }

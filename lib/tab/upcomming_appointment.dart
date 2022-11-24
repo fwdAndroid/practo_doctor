@@ -20,21 +20,26 @@ class _UpComingState extends State<UpComing> {
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('appointments')
+                    .doc("details")
+                    .collection("records")
+
                     // .where(
                     //   'status',
                     //   isNotEqualTo: 'pending',
                     // )
-                    .where('status', isEqualTo: "approve")
+                    .where('doctorid',
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .where("status", isEqualTo: "start")
                     .snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
+                builder: (context, AsyncSnapshot snapshot) {
+                  print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
                       child: Text('Something went wrong'),
                     );
                   }
                   if (snapshot.hasData) {
+                    print("working");
                     return Column(
                       children: [
                         // Padding(
@@ -77,40 +82,14 @@ class _UpComingState extends State<UpComing> {
                       ],
                     );
                   } else {
+                    print("Not Working");
                     return const Center(
                       child: CircularProgressIndicator.adaptive(),
                     );
                   }
                 })
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      "asset/no.png",
-                      width: 270,
-                      height: 260,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        "You Dont Have Appointment",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  
-                ],
+            : const Center(
+                child: Text('No Appointment Approval is needed'),
               ),
       ),
     );
