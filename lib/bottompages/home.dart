@@ -170,21 +170,6 @@ class _Home_ScreenState extends State<Home_Screen> {
                                                   documentSnapshot['name']),
                                               subtitle: Text(
                                                   documentSnapshot['problem']),
-                                              trailing: TextButton(
-                                                child: Text("Complete"),
-                                                onPressed: () async {
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection(
-                                                          'appointments')
-                                                      .doc("details")
-                                                      .collection("records")
-                                                      .doc(documentSnapshot.id)
-                                                      .update({
-                                                    "status": "complete"
-                                                  });
-                                                },
-                                              ),
                                             ),
                                             Divider()
                                           ],
