@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:practo_doctor/view_detail/view_detail.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key}) : super(key: key);
@@ -23,24 +26,78 @@ class _NotificationsState extends State<Notifications> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: ListView.builder(itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage("asset/doctor.png"),
-              ),
-              title: Text(
-                "Appointment Alert",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-              subtitle: Text(
-                "On Saturday You've an appointment ",
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-              )),
-        );
-      }),
+      body: SingleChildScrollView(
+        child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('appointments')
+                    .doc("details")
+                    .collection("records")
+                    .where(
+                      "doctorid",
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                    )
+                    .where('status', isEqualTo: "start")
+                    .snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('No UpComming Appointment'),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final DocumentSnapshot documentSnapshot =
+                                    snapshot.data!.docs[index];
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    View_Detial(
+                                                      age: documentSnapshot[
+                                                          'age'],
+                                                      id: documentSnapshot[
+                                                          'id'],
+                                                      date: documentSnapshot[
+                                                          'date'],
+                                                      name: documentSnapshot[
+                                                          'name'],
+                                                      phone: documentSnapshot[
+                                                          'phoneNumber'],
+                                                      problem: documentSnapshot[
+                                                          'problem'],
+                                                    )));
+                                      },
+                                      title: Text(documentSnapshot['name']),
+                                      subtitle: Text(documentSnapshot['date']),
+                                    ),
+                                    Divider()
+                                  ],
+                                );
+                              }),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  }
+                })),
+      ),
     );
   }
 }
