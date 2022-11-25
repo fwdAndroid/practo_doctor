@@ -171,7 +171,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                                               subtitle: Text(
                                                   documentSnapshot['problem']),
                                               trailing: TextButton(
-                                                child: Text("Complet"),
+                                                child: Text("Complete"),
                                                 onPressed: () async {
                                                   await FirebaseFirestore
                                                       .instance
