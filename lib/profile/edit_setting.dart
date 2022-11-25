@@ -86,6 +86,16 @@ class _Edit_SettingState extends State<Edit_Setting> {
                   return new CircularProgressIndicator();
                 }
                 var document = snapshot.data;
+                doctoremailController.text = document['doctorEmail'];
+                doctorAddressController.text = document['doctorAddres'];
+
+                doctorHospitalNameController.text = document['doctorHospital'];
+                doctorExperienceController.text = document['experience'];
+                doctorDateofBirthContorller.text = document['doctorDOB'];
+                doctorSpecializationCOntroller.text =
+                    document['doctorSpecialization'];
+                doctorDiseaseController.text = document['doctortreatedDiseacs'];
+                doctorDescriptionController.text = document['doctorDesc'];
                 return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -115,7 +125,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.email),
                           fillColor: Colors.white,
-                          labelText: document['doctorEmail'],
                           hintText: 'Email',
                           border: inputBorder,
                           focusedBorder: inputBorder,
@@ -134,7 +143,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                           suffixIcon: Icon(Icons.local_hospital),
                           fillColor: Colors.white,
                           hintText: 'Hospital Name',
-                          labelText: document['doctorHospital'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -151,7 +159,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.type_specimen),
                           fillColor: Colors.white,
-                          labelText: document['doctorSpecialization'],
                           hintText: 'Specialization',
                           border: inputBorder,
                           focusedBorder: inputBorder,
@@ -170,7 +177,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                           suffixIcon: Icon(Icons.disabled_by_default),
                           fillColor: Colors.white,
                           hintText: 'Disease',
-                          labelText: document['doctortreatedDiseacs'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -188,7 +194,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                           suffixIcon: Icon(Icons.description),
                           fillColor: Colors.white,
                           hintText: 'Description',
-                          labelText: document['doctorDesc'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -205,7 +210,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                           suffixIcon: Icon(Icons.home),
                           fillColor: Colors.white,
                           hintText: 'Address',
-                          labelText: document['doctorAddres'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
@@ -223,7 +227,6 @@ class _Edit_SettingState extends State<Edit_Setting> {
                           suffixIcon: Icon(Icons.explore),
                           fillColor: Colors.white,
                           hintText: 'Experience',
-                          labelText: document['experience'],
                           border: inputBorder,
                           focusedBorder: inputBorder,
                           enabledBorder: inputBorder,
