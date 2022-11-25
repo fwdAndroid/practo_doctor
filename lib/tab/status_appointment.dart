@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:practo_doctor/view_detail/view_detail.dart';
 import 'package:uuid/uuid.dart';
 
 class StatusAppointment extends StatefulWidget {
@@ -26,11 +27,10 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                     .collection('appointments')
                     .doc("details")
                     .collection("records")
-
-                    // .where(
-                    //   'status',
-                    //   isNotEqualTo: 'pending',
-                    // )
+                    .where(
+                      'status',
+                      isNotEqualTo: 'pending',
+                    )
                     .where('doctorid',
                         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(includeMetadataChanges: true),
@@ -38,7 +38,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                   print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
-                      child: Text('Something went wrong'),
+                      child: Text('No Data Found'),
                     );
                   }
                   if (snapshot.hasData) {
@@ -65,51 +65,59 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                 return Column(
                                   children: [
                                     ListTile(
-                                      title: Text(documentSnapshot['name']),
-                                      subtitle:
-                                          Text(documentSnapshot['problem']),
-                                      trailing: Column(
-                                        children: [
-                                          Expanded(
-                                            child: IconButton(
-                                              onPressed: () async {
-                                                print(documentSnapshot);
-                                                await FirebaseFirestore.instance
-                                                    .collection('appointments')
-                                                    .doc("details")
-                                                    .collection("records")
-                                                    .doc(documentSnapshot!.id)
-                                                    .update({
-                                                  "status": "start",
-                                                });
-                                                print("ass");
-                                              },
-                                              icon: Icon(
-                                                Icons.check,
-                                                color: Colors.green,
-                                              ),
+                                        title: Text(documentSnapshot['name']),
+                                        subtitle:
+                                            Text(documentSnapshot['problem']),
+                                        trailing: Column(
+                                          children: [
+                                            Expanded(
+                                              child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (builder) =>
+                                                                    View_Detial(
+                                                                      age: documentSnapshot[
+                                                                          'age'],
+                                                                      id: documentSnapshot[
+                                                                          'id'],
+                                                                      date: documentSnapshot[
+                                                                          'date'],
+                                                                      name: documentSnapshot[
+                                                                          'name'],
+                                                                      phone: documentSnapshot[
+                                                                          'phoneNumber'],
+                                                                      problem:
+                                                                          documentSnapshot[
+                                                                              'problem'],
+                                                                    )));
+                                                  },
+                                                  child: Text("View")),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: IconButton(
-                                              onPressed: () async {
-                                                print(documentSnapshot);
-                                                await FirebaseFirestore.instance
-                                                    .collection('appointments')
-                                                    .doc("details")
-                                                    .collection("records")
-                                                    .doc(documentSnapshot.id)
-                                                    .delete();
-                                              },
-                                              icon: Icon(
-                                                Icons.close,
-                                                color: Colors.redAccent,
+                                            Expanded(
+                                              child: IconButton(
+                                                onPressed: () async {
+                                                  print(documentSnapshot);
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'appointments')
+                                                      .doc("details")
+                                                      .collection("records")
+                                                      .doc(documentSnapshot.id)
+                                                      .update(
+                                                          {"status": "start"});
+                                                },
+                                                icon: Icon(
+                                                  Icons.check,
+                                                  color: Colors.green,
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                            )
+                                          ],
+                                        )),
                                     Divider()
                                   ],
                                 );

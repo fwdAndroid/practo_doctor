@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practo_doctor/appointments/appointments_tabs.dart';
 import 'package:practo_doctor/notification/notifications.dart';
 import 'package:practo_doctor/schdule/schedule.dart';
+import 'package:practo_doctor/view_detail/view_detail.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({Key? key}) : super(key: key);
@@ -102,18 +104,20 @@ class _Home_ScreenState extends State<Home_Screen> {
                     child: StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('appointments')
-                            // .where(
-                            //   'status',
-                            //   isNotEqualTo: 'pending',
-                            // )
-                            .where('status', isEqualTo: "approve")
+                            .doc("details")
+                            .collection("records")
+                            .where(
+                              "doctorid",
+                              isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                            )
+                            .where('status', isEqualTo: "start")
                             .snapshots(),
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                                 snapshot) {
                           if (snapshot.hasError) {
                             return const Center(
-                              child: Text('Something went wrong'),
+                              child: Text('No UpComming Appointment'),
                             );
                           }
                           if (snapshot.hasData) {
@@ -134,23 +138,53 @@ class _Home_ScreenState extends State<Home_Screen> {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        Map<String, dynamic> snap =
-                                            snapshot.data!.docs[index].data()
-                                                as Map<String, dynamic>;
+                                        final DocumentSnapshot
+                                            documentSnapshot =
+                                            snapshot.data!.docs[index];
                                         return Column(
                                           children: [
                                             ListTile(
                                               onTap: () {
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //     builder: (builder) =>
-                                                //         AppointCurrentDetail(),
-                                                //   ),
-                                                // );
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder:
+                                                            (builder) =>
+                                                                View_Detial(
+                                                                  age: documentSnapshot[
+                                                                      'age'],
+                                                                  id: documentSnapshot[
+                                                                      'id'],
+                                                                  date: documentSnapshot[
+                                                                      'date'],
+                                                                  name: documentSnapshot[
+                                                                      'name'],
+                                                                  phone: documentSnapshot[
+                                                                      'phoneNumber'],
+                                                                  problem:
+                                                                      documentSnapshot[
+                                                                          'problem'],
+                                                                )));
                                               },
-                                              title: Text(snap['name']),
-                                              subtitle: Text(snap['problem']),
+                                              title: Text(
+                                                  documentSnapshot['name']),
+                                              subtitle: Text(
+                                                  documentSnapshot['problem']),
+                                              trailing: TextButton(
+                                                child: Text("Complet"),
+                                                onPressed: () async {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'appointments')
+                                                      .doc("details")
+                                                      .collection("records")
+                                                      .doc(documentSnapshot.id)
+                                                      .update({
+                                                    "status": "complete"
+                                                  });
+                                                },
+                                              ),
                                             ),
                                             Divider()
                                           ],

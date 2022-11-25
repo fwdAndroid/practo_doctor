@@ -33,7 +33,7 @@ class _UpComingState extends State<UpComing> {
                   print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
-                      child: Text('Something went wrong'),
+                      child: Text('No UpComming Appointment'),
                     );
                   }
                   if (snapshot.hasData) {
@@ -63,6 +63,16 @@ class _UpComingState extends State<UpComing> {
                                       title: Text(documentSnapshot['name']),
                                       subtitle:
                                           Text(documentSnapshot['problem']),
+                                      trailing: TextButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('appointments')
+                                                .doc("details")
+                                                .collection("records")
+                                                .doc(documentSnapshot.id)
+                                                .update({"status": "complete"});
+                                          },
+                                          child: Text("Complete")),
                                     ),
                                     Divider()
                                   ],

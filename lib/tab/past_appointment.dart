@@ -24,11 +24,7 @@ class _PastState extends State<Past> {
                     .collection('appointments')
                     .doc("details")
                     .collection("records")
-
-                    // .where(
-                    //   'status',
-                    //   isNotEqualTo: 'pending',
-                    // )
+                  
                     .where('doctorid',
                         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                     .where("status", isEqualTo: "complete")
@@ -37,7 +33,7 @@ class _PastState extends State<Past> {
                   print("Fawad");
                   if (snapshot.hasError) {
                     return const Center(
-                      child: Text('Something went wrong'),
+                      child: Text('No Complete Appointment'),
                     );
                   }
                   if (snapshot.hasData) {
