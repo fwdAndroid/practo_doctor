@@ -34,6 +34,7 @@ class DatabaseMethods {
     try {
       //Add User to the database with modal
       ProfileModel userModel = ProfileModel(
+          like: false,
           doctorAddres: '',
           doctorCertificationImages: [],
           doctorDOB: '',
@@ -84,6 +85,7 @@ class DatabaseMethods {
         //Add User to the database with modal
 
         ProfileModel userModel = ProfileModel(
+            like: false,
             doctorCertificationImages: [],
             uid: uid,
             experience: experience,

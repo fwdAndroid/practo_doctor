@@ -18,9 +18,11 @@ class ProfileModel {
   List<String>? doctorCertificationImages;
   String doctortreatedDiseacs;
   String experience;
+  bool like;
 
   ProfileModel({
     required this.uid,
+    required this.like,
     required this.doctorHospital,
     required this.doctorSpecialization,
     required this.doctorEmail,
@@ -49,7 +51,8 @@ class ProfileModel {
         'doctorPhotoURL': doctorPhotoURL,
         'doctorSpecialization': doctorSpecialization,
         'doctorAddres': doctorAddres,
-        'doctorHospital': doctorHospital
+        'doctorHospital': doctorHospital,
+        'like':like
       };
 
   ///
@@ -70,6 +73,7 @@ class ProfileModel {
       doctorSpecialization: snapshot['doctorSpecialization'],
       doctorAddres: snapshot['doctorAddres'],
       doctorHospital: snapshot['doctorHospital'],
+      like:snapshot['like']
     );
   }
 }
