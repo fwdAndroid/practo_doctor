@@ -122,6 +122,8 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                                               'doctorid'],
                                                                       userid: documentSnapshot[
                                                                           'id'],
+                                                                      name: documentSnapshot[
+                                                                          'name'],
                                                                     )));
                                                   });
                                                 },

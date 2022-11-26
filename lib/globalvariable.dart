@@ -16,7 +16,11 @@ const webScreenSize = 600;
 List<Widget> homeScreenItems = [
   Home_Screen(),
   Appointment(),
-  ChatPage(doctorid: "", userid: ""),
+  ChatPage(
+    doctorid: "",
+    userid: "",
+    name: "",
+  ),
   Setting(),
 
   // Profile()

@@ -30,14 +30,6 @@ class Conversation extends StatelessWidget {
                       isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    if (!isMe)
-                      CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage(user.avatar),
-                      ),
-                    SizedBox(
-                      width: 10,
-                    ),
                     Container(
                       padding: EdgeInsets.all(10),
                       constraints: BoxConstraints(
