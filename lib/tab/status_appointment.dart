@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:practo_doctor/bottompages/chats/screens/chat_page.dart';
 import 'package:practo_doctor/view_detail/view_detail.dart';
 import 'package:uuid/uuid.dart';
 
@@ -29,7 +30,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                     .collection("records")
                     .where(
                       'status',
-                      isNotEqualTo: 'pending',
+                      isEqualTo: 'pending',
                     )
                     .where('doctorid',
                         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -107,8 +108,22 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                       .doc("details")
                                                       .collection("records")
                                                       .doc(documentSnapshot.id)
-                                                      .update(
-                                                          {"status": "start"});
+                                                      .update({
+                                                    "status": "start"
+                                                  }).whenComplete(() {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (builder) =>
+                                                                    ChatPage(
+                                                                      doctorid:
+                                                                          documentSnapshot[
+                                                                              'doctorid'],
+                                                                      userid: documentSnapshot[
+                                                                          'id'],
+                                                                    )));
+                                                  });
                                                 },
                                                 icon: Icon(
                                                   Icons.check,

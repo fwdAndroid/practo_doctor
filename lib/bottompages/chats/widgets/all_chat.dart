@@ -1,4 +1,3 @@
-
 import '../models/message_model.dart';
 import '../screens/chat_room.dart';
 import '../screens/screen.dart';
@@ -54,13 +53,6 @@ class AllChats extends StatelessWidget {
                         child: Container(
                             margin: const EdgeInsets.only(top: 20),
                             child: Row(children: [
-                              CircleAvatar(
-                                radius: 28,
-                                backgroundImage: AssetImage(allChat.avatar),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
@@ -83,19 +75,6 @@ class AllChats extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  allChat.unreadCount == 0
-                                      ? CircleAvatar(
-                                          radius: 8,
-                                          backgroundColor: Color(0xff2743FD),
-                                          child: Text(
-                                            allChat.unreadCount.toString(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        )
-                                      : Text(""),
                                   SizedBox(
                                     height: 10,
                                   ),
