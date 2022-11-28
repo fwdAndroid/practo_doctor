@@ -70,6 +70,8 @@ class _AllChatsState extends State<AllChats> {
                   }
 
                   if (snapshot.hasData) {
+                    print(FirebaseAuth.instance.currentUser!.uid);
+
                     return ListView.builder(
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
@@ -78,11 +80,17 @@ class _AllChatsState extends State<AllChats> {
                           final allChat = allChats[index];
                           final DocumentSnapshot documentSnapshot =
                               snapshot.data!.docs[index];
-                          return GestureDetector(
+                          return InkWell(
                             onTap: () {
                               Navigator.push(context,
                                   CupertinoPageRoute(builder: (context) {
-                                return ChatRoom(user: allChat.sender);
+                                return ChatRoom(
+                                  doctorName: documentSnapshot['doctorName'],
+                                  userid: documentSnapshot['id'],
+                                  doctorid: documentSnapshot['doctorid'],
+                                  paitentname: documentSnapshot['name'],
+                                  // user : widget.doctorid,
+                                );
                               }));
                             },
                             child: Padding(
@@ -99,31 +107,14 @@ class _AllChatsState extends State<AllChats> {
                                           Text(
                                             documentSnapshot['name'],
                                             style: MyTheme.heading2.copyWith(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
                                           ),
-                                          Text(documentSnapshot['doctorid'],
+                                          Text(documentSnapshot['doctorName'],
                                               style: TextStyle(
                                                   color: Color(0xff858585),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400)),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            allChat.time,
-                                            style: MyTheme.bodyTextTime,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
                                         ],
                                       ),
                                     ]))),

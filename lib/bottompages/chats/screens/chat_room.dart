@@ -1,29 +1,82 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../app_theme.dart';
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../widgets/widgets.dart';
 
 class ChatRoom extends StatefulWidget {
-  const ChatRoom({Key? key, required this.user}) : super(key: key);
+  final paitentname;
+  final doctorid;
+  final doctorName;
+  final userid;
+  const ChatRoom(
+      {Key? key,
+      required this.doctorid,
+      required this.userid,
+      required this.doctorName,
+      required this.paitentname})
+      : super(key: key);
 
   @override
   _ChatRoomState createState() => _ChatRoomState();
-  final User user;
+  // final User user;
 }
 
 class _ChatRoomState extends State<ChatRoom> {
+  String chatId = "";
+  ScrollController scrollController = ScrollController();
+  TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (FirebaseAuth.instance.currentUser!.uid.hashCode <=
+        widget.userid.hashCode) {
+      chatId = "${FirebaseAuth.instance.currentUser!.uid}-${widget.userid}";
+    } else {
+      chatId = "${widget.userid}-${FirebaseAuth.instance.currentUser!.uid}";
+    }
+    // firebaseFirestore.collection("users").doc(widget.receiverId).get().then((value) {
+    //   setState(() {
+    //     receiverimageLink= value.get("imageLink");
+    //     receiverName=value.get("UserName");
+    //   });
+    // });
+    //  var a= FirebaseFirestore.instance.collection("collectionPath");
+    //   FirebaseFirestore.instance.collection("users").doc(widget.userid).get().then((value) {
+    //     setState(() {
+    //       myStatus= value.get("status");
+    //       // receiverName=value.get("UserName");
+    //     });
+    //   });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          'Jane Cooper',
-          style: TextStyle(
-              fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black),
+        title: Column(
+          children: [
+            Text(
+              widget.doctorName,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+            Text(
+              widget.paitentname,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          ],
         ),
         actions: [
           Padding(
@@ -50,16 +103,102 @@ class _ChatRoomState extends State<ChatRoom> {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  child: Conversation(user: widget.user),
-                ),
-              ),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("messages")
+                      .doc(chatId)
+                      .collection(chatId)
+                      .orderBy("timestamp", descending: false)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!.docs == 0
+                          ? Center(child: Text("No Communication Start"))
+                          : ListView.builder(
+                              controller: scrollController,
+                              itemCount: snapshot.data!.docs.length,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var ds = snapshot.data!.docs[index];
+                                return ds.get("type") == 0
+                                    ? Container(
+                                        padding: EdgeInsets.only(
+                                            left: 14,
+                                            right: 14,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Align(
+                                          alignment: (ds.get("senderId") ==
+                                                  FirebaseAuth
+                                                      .instance.currentUser!.uid
+                                              ? Alignment.bottomRight
+                                              : Alignment.bottomLeft),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: (ds.get("senderId") ==
+                                                      FirebaseAuth.instance
+                                                          .currentUser!.uid
+                                                  ? Colors.grey.shade200
+                                                  : Colors.blue[200]),
+                                            ),
+                                            padding: EdgeInsets.all(16),
+                                            child: Text(
+                                              ds.get("content"),
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : ds.get("type") == 1
+                                        ? Container(
+                                            padding: EdgeInsets.only(
+                                                left: 14,
+                                                right: 14,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: Align(
+                                              alignment: (ds.get("senderId") ==
+                                                      FirebaseAuth.instance
+                                                          .currentUser!.uid
+                                                  ? Alignment.bottomRight
+                                                  : Alignment.bottomLeft),
+                                              child: Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        ds.get("image"),
+                                                      ),
+                                                      fit: BoxFit.fill),
+                                                  // color: (ds.get("senderId") == firebaseAuth.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
+                                                ),
+                                                // padding: EdgeInsets.all(16),
+                                              ),
+                                            ),
+                                          )
+                                        : Container();
+                              },
+                            );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Icon(Icons.error_outline));
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -105,21 +244,18 @@ class _ChatRoomState extends State<ChatRoom> {
                           SizedBox(
                             width: 10,
                           ),
-                          InkWell(
-                            onTap: () {
+                          FloatingActionButton(
+                            onPressed: () {
                               sendMessage(controller.text.trim(), 0);
                             },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.blue, shape: BoxShape.circle),
-                              child: Icon(
-                                Icons.send,
-                                color: Colors.white,
-                              ),
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.white,
+                              size: 18,
                             ),
-                          )
+                            backgroundColor: Colors.blue,
+                            elevation: 0,
+                          ),
                         ],
                       ),
                     ),
@@ -127,11 +263,40 @@ class _ChatRoomState extends State<ChatRoom> {
                 ],
               ),
             )
+            // buildChatComposer()
           ],
         ),
       ),
     );
   }
-  
-  void sendMessage(String trim, int i) {}
+
+  void sendMessage(String content, int type) {
+    if (content.trim() != '') {
+      controller.clear();
+
+      var documentReference = FirebaseFirestore.instance
+          .collection('messages')
+          .doc(chatId)
+          .collection(chatId)
+          .doc(DateTime.now().millisecondsSinceEpoch.toString());
+
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        await transaction.set(
+          documentReference,
+          {
+            "senderId": FirebaseAuth.instance.currentUser!.uid,
+            "receiverId": widget.userid,
+            "time": DateTime.now(),
+            'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+            'content': content,
+            'type': type
+          },
+        );
+      });
+      scrollController.animateTo(0.0,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    } else {
+      // Fluttertoast.showToast(msg: 'Nothing to send');
+    }
+  }
 }
