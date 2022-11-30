@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import '../models/message_model.dart';
 import '../screens/chat_room.dart';
 import 'package:flutter/material.dart';
 
@@ -77,7 +76,6 @@ class _AllChatsState extends State<AllChats> {
                         physics: ScrollPhysics(),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, int index) {
-                          final allChat = allChats[index];
                           final DocumentSnapshot documentSnapshot =
                               snapshot.data!.docs[index];
                           return InkWell(
