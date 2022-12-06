@@ -8,9 +8,11 @@ class SchduleModel {
   String uid;
   String time;
   String day;
+  String endtime;
   String? uuid;
   SchduleModel({
     required this.uid,
+    required this.endtime,
     required this.time,
     required this.day,
     required this.uuid,
@@ -20,6 +22,7 @@ class SchduleModel {
   Map<String, dynamic> toJson() => {
         'time': time,
         'day': day,
+        'endtime':endtime,
         'uuid': uuid,
       };
 
@@ -32,6 +35,7 @@ class SchduleModel {
       day: snapshot['day'],
       uid: snapshot['uid'],
       uuid: snapshot['uuid'],
+      endtime: snapshot['endtime']
     );
   }
 }

@@ -178,7 +178,7 @@ class DatabaseMethods {
 // }
 //Add Service
   Future<String> doctorTime(
-      {required String time, required String day, required String uid}) async {
+      {required String time, required String day, required String uid, required String endtime}) async {
     String res =
         'Update all the fields data to store it because doctor information will be updated in sequences ';
     try {
@@ -190,6 +190,7 @@ class DatabaseMethods {
           day: day,
           uid: uid,
           uuid: uuid,
+          endtime: endtime
         );
 
         firebaseFirestore
