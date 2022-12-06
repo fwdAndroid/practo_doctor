@@ -6,7 +6,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:practo_doctor/bottom.dart';
 import 'package:practo_doctor/database/databasemethods.dart';
 import 'package:practo_doctor/profile/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'continuephone.dart';
 
@@ -79,10 +78,6 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                             verificationId: verificationCode!, smsCode: pin))
                         .then((value) async {
                       if (value.user != null) {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.setString(
-                            "userID", FirebaseAuth.instance.currentUser!.uid);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (builder) => MobileScreenLayout()));
                       }
