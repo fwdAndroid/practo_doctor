@@ -88,8 +88,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                                           'date'],
                                                                       name: documentSnapshot[
                                                                           'name'],
-                                                                      phone: documentSnapshot[
-                                                                          'phoneNumber'],
+                                                                     
                                                                       problem:
                                                                           documentSnapshot[
                                                                               'problem'],

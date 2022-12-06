@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:practo_doctor/bottompages/chats/videochat/meeting_screen.dart';
 
 import '../app_theme.dart';
 import 'package:flutter/material.dart';
@@ -79,12 +80,17 @@ class _ChatRoomState extends State<ChatRoom> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.video_call,
-              color: Colors.blue,
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => MeetingScreen()));
+                },
+                icon: Icon(
+                  Icons.video_call,
+                  color: Colors.blue,
+                ),
+              )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(

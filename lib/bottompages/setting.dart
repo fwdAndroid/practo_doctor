@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:practo_doctor/auth/continuephone.dart';
+import 'package:practo_doctor/auth/mainauth.dart';
 import 'package:practo_doctor/notification/notifications.dart';
 import 'package:practo_doctor/profile/edit_setting.dart';
 
@@ -199,7 +200,7 @@ class _SettingState extends State<Setting> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) => ContinuePhone()))
+                              builder: (builder) => MainAuth()))
                     });
               })
             ],

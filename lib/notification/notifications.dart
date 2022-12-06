@@ -75,8 +75,6 @@ class _NotificationsState extends State<Notifications> {
                                                           'date'],
                                                       name: documentSnapshot[
                                                           'name'],
-                                                      phone: documentSnapshot[
-                                                          'phoneNumber'],
                                                       problem: documentSnapshot[
                                                           'problem'],
                                                     )));

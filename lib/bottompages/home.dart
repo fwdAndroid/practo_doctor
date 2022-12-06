@@ -159,8 +159,6 @@ class _Home_ScreenState extends State<Home_Screen> {
                                                                       'date'],
                                                                   name: documentSnapshot[
                                                                       'name'],
-                                                                  phone: documentSnapshot[
-                                                                      'phoneNumber'],
                                                                   problem:
                                                                       documentSnapshot[
                                                                           'problem'],

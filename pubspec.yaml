@@ -51,6 +51,9 @@ dependencies:
   form_field_validator: ^1.1.0
   country_code_picker: ^2.0.2
   google_sign_in: ^5.4.2
+  shared_preferences: ^2.0.15
+  get: ^4.6.5
+  jitsi_meet: ^4.0.0
   
 
 dev_dependencies:

@@ -92,35 +92,6 @@ class _AppointmentState extends State<Appointment>
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Phone Number:",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          ds['phoneNumber'],
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(),
-
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
                           "Specialization:",
                           style: TextStyle(
                               color: Colors.black,

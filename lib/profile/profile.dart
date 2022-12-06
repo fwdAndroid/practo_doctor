@@ -426,7 +426,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 TextFormInputField(
                   hintText: 'Enter Doctor Experience',
-                  textInputType: TextInputType.text,
+                  textInputType: TextInputType.number,
                   controller: doctorExperienceController,
                 ),
                 SizedBox(
