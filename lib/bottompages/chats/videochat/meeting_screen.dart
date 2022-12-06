@@ -27,6 +27,7 @@ class MeetingScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,17 +43,6 @@ class MeetingScreen extends StatelessWidget {
                   icon: Icons.add_box_rounded,
                 ),
               ],
-            ),
-            const Expanded(
-              child: Center(
-                child: Text(
-                  'Create/Join Meetings with just a click!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
             ),
           ],
         ),
