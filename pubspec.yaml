@@ -54,6 +54,7 @@ dependencies:
   shared_preferences: ^2.0.15
   get: ^4.6.5
   jitsi_meet: ^4.0.0
+  file_picker: ^5.2.3
   
 
 dev_dependencies:

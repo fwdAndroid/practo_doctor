@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:practo_doctor/bottompages/chats/videochat/meeting_screen.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:uuid/uuid.dart';
 import '../app_theme.dart';
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
@@ -28,6 +33,11 @@ class _ChatRoomState extends State<ChatRoom> {
   String chatId = "";
   ScrollController scrollController = ScrollController();
   TextEditingController controller = TextEditingController();
+  String? imageLink;
+  ImagePicker _picker = ImagePicker();
+  File? imageUrl;
+  PlatformFile? pickedFIle;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -91,13 +101,6 @@ class _ChatRoomState extends State<ChatRoom> {
                   color: Colors.blue,
                 ),
               )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.phone,
-              color: Colors.blue,
-            ),
-          ),
         ],
       ),
       backgroundColor: MyTheme.kPrimaryColor,
@@ -120,83 +123,95 @@ class _ChatRoomState extends State<ChatRoom> {
                     if (snapshot.hasData) {
                       return snapshot.data!.docs == 0
                           ? Center(child: Text("No Communication Start"))
-                          : ListView.builder(
-                              controller: scrollController,
-                              itemCount: snapshot.data!.docs.length,
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                var ds = snapshot.data!.docs[index];
-                                return ds.get("type") == 0
-                                    ? Container(
-                                        padding: EdgeInsets.only(
-                                            left: 14,
-                                            right: 14,
-                                            top: 10,
-                                            bottom: 10),
-                                        child: Align(
-                                          alignment: (ds.get("senderId") ==
-                                                  FirebaseAuth
-                                                      .instance.currentUser!.uid
-                                              ? Alignment.bottomRight
-                                              : Alignment.bottomLeft),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              color: (ds.get("senderId") ==
-                                                      FirebaseAuth.instance
-                                                          .currentUser!.uid
-                                                  ? Colors.grey.shade200
-                                                  : Colors.blue[200]),
-                                            ),
-                                            padding: EdgeInsets.all(16),
-                                            child: Text(
-                                              ds.get("content"),
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : ds.get("type") == 1
-                                        ? Container(
-                                            padding: EdgeInsets.only(
-                                                left: 14,
-                                                right: 14,
-                                                top: 10,
-                                                bottom: 10),
-                                            child: Align(
-                                              alignment: (ds.get("senderId") ==
-                                                      FirebaseAuth.instance
-                                                          .currentUser!.uid
-                                                  ? Alignment.bottomRight
-                                                  : Alignment.bottomLeft),
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.2,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.4,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        ds.get("image"),
-                                                      ),
-                                                      fit: BoxFit.fill),
-                                                  // color: (ds.get("senderId") == firebaseAuth.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
-                                                ),
-                                                // padding: EdgeInsets.all(16),
+                          : SingleChildScrollView(
+                              child: ListView.builder(
+                                controller: scrollController,
+                                itemCount: snapshot.data!.docs.length,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  var ds = snapshot.data!.docs[index];
+                                  return ds.get("type") == 0
+                                      ? Container(
+                                          padding: EdgeInsets.only(
+                                              left: 14,
+                                              right: 14,
+                                              top: 10,
+                                              bottom: 10),
+                                          child: Align(
+                                            alignment: (ds.get("senderId") ==
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid
+                                                ? Alignment.bottomRight
+                                                : Alignment.bottomLeft),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: (ds.get("senderId") ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid
+                                                    ? Colors.grey.shade200
+                                                    : Colors.blue[200]),
+                                              ),
+                                              padding: EdgeInsets.all(16),
+                                              child: Text(
+                                                ds.get("content"),
+                                                style: TextStyle(fontSize: 15),
                                               ),
                                             ),
-                                          )
-                                        : Container();
-                              },
+                                          ),
+                                        )
+                                      : ds.get("type") == 1
+                                          ? Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 14,
+                                                  right: 14,
+                                                  top: 10,
+                                                  bottom: 10),
+                                              child: Align(
+                                                  alignment: (ds.get(
+                                                              "senderId") ==
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid
+                                                      ? Alignment.bottomRight
+                                                      : Alignment.bottomLeft),
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(16),
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.2,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.4,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              "https://www.winzip.com/static/wz/images/learn/features/file-manager/file-manager.jpg"),
+                                                          fit: BoxFit.cover),
+                                                      color: (ds.get(
+                                                                  "senderId") ==
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid
+                                                          ? Colors.grey.shade200
+                                                          : Colors.blue[200]),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+
+                                                    //
+                                                  )))
+                                          : Container();
+                                },
+                              ),
                             );
                     } else if (snapshot.hasError) {
                       return Center(child: Icon(Icons.error_outline));
@@ -228,7 +243,10 @@ class _ChatRoomState extends State<ChatRoom> {
                                   children: <Widget>[
                                     Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Icon(Icons.attach_file)),
+                                        child: IconButton(
+                                          icon: Icon(Icons.attach_file),
+                                          onPressed: addImage,
+                                        )),
                                   ],
                                 ),
                                 enabledBorder: OutlineInputBorder(
@@ -303,5 +321,56 @@ class _ChatRoomState extends State<ChatRoom> {
     } else {
       // Fluttertoast.showToast(msg: 'Nothing to send');
     }
+  }
+
+  void addImage() async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result == null) return;
+    final path = result.files.last;
+
+    //  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      pickedFIle = path;
+    });
+    await uploadImageToFirebase().then((value) {
+      var documentReference = FirebaseFirestore.instance
+          .collection('messages')
+          .doc(chatId)
+          .collection(chatId)
+          .doc(DateTime.now().millisecondsSinceEpoch.toString());
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        await transaction.set(
+          documentReference,
+          {
+            "senderId": FirebaseAuth.instance.currentUser!.uid,
+            "receiverId": widget.userid,
+            // "content": messageController.text,
+            "time": DateTime.now(),
+            'image': imageLink,
+            'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+            // 'content': content,
+            'type': 1
+          },
+        );
+      });
+    }).then((value) {
+      FocusScope.of(context).unfocus();
+      controller.clear();
+    });
+  }
+
+  Future uploadImageToFirebase() async {
+    var uuid = Uuid();
+    final path = 'files/${pickedFIle!.name}';
+    final file = File(pickedFIle!.path!);
+    firebase_storage.Reference firebaseStorageRef =
+        firebase_storage.FirebaseStorage.instance.ref().child(path);
+    //.child('messages/images+${uuid.v4()}${file}');
+    firebase_storage.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+
+    final snapshot = await uploadTask.whenComplete(() {});
+    final downloadlink = await snapshot.ref.getDownloadURL();
+    print(downloadlink);
   }
 }
