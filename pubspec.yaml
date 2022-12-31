@@ -51,6 +51,9 @@ dependencies:
   jitsi_meet: ^4.0.0
   file_picker: ^5.2.3
   flutter_credit_card: ^3.0.4
+  gallery_saver: ^2.3.2
+  zego_uikit_prebuilt_call: ^1.2.14
+  dio: ^4.0.6
   
 
 dev_dependencies:

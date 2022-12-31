@@ -54,7 +54,7 @@ class _AllChatsState extends State<AllChats> {
             padding: const EdgeInsets.all(2.0),
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection("appointments")
+                    .collection("doctor_appointment")
                     .doc("details")
                     .collection("records")
                     .where("status", isEqualTo: "start")
