@@ -31,7 +31,7 @@ class _NotificationsState extends State<Notifications> {
             height: MediaQuery.of(context).size.height,
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('appointments')
+                    .collection('doctor_appointment')
                     .doc("details")
                     .collection("records")
                     .where(
