@@ -103,7 +103,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                     height: MediaQuery.of(context).size.height,
                     child: StreamBuilder(
                         stream: FirebaseFirestore.instance
-                            .collection('appointments')
+                            .collection('doctor_appointment')
                             .doc("details")
                             .collection("records")
                             .where(

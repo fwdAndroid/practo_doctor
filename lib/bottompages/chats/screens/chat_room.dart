@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,12 +31,16 @@ class _ChatRoomState extends State<ChatRoom> {
   ScrollController scrollController = ScrollController();
   final ImagePicker _picker = ImagePicker();
   File? imageUrl;
+  PlatformFile? pickedFIle;
   TextEditingController messageController = TextEditingController();
   String? imageLink;
   void addImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+    final path = result.files.last;
+    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      imageUrl = File(image!.path);
+      pickedFIle = path;
     });
     await uploadImageToFirebase().then((value) {
       var documentReference = FirebaseFirestore.instance
@@ -54,7 +59,8 @@ class _ChatRoomState extends State<ChatRoom> {
             'image': imageLink,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
             // 'content': content,
-            'type': 1
+            'type': 1,
+            'ctype': 2
           },
         );
       });
@@ -231,7 +237,49 @@ class _ChatRoomState extends State<ChatRoom> {
                                                 ),
                                               ),
                                             )
-                                          : Container();
+                                          : ds.get("ctype") == 2
+                                              ? Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 14,
+                                                      right: 14,
+                                                      top: 10,
+                                                      bottom: 10),
+                                                  child: Align(
+                                                    alignment: (ds.get(
+                                                                "senderId") ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid
+                                                        ? Alignment.bottomRight
+                                                        : Alignment.bottomLeft),
+                                                    child: Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.2,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.4,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(
+                                                              ("https://static-01.daraz.pk/p/ef42af552962983dd04e9bbd49332175.jpg"),
+                                                            ),
+                                                            fit: BoxFit.fill),
+                                                        // color: (ds.get("senderId") == FirebaseAuth.instance.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
+                                                      ),
+                                                      // padding: EdgeInsets.all(16),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container();
                                 },
                               ),
                             );
@@ -283,7 +331,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       ),
                       FloatingActionButton(
                         onPressed: () {
-                          sendMessage(messageController.text.trim(), 0);
+                          sendMessage(messageController.text.trim(), 0, 0);
                         },
                         child: Icon(
                           Icons.send,
@@ -302,8 +350,8 @@ class _ChatRoomState extends State<ChatRoom> {
         ));
   }
 
-  void sendMessage(String content, int type) {
-    // type: 0 = text, 1 = image, 2 = sticker
+  void sendMessage(String content, int type, int ctype) {
+    // type: 0 = text, 1 = image, 2 = sticker, file 3
     if (content.trim() != '') {
       messageController.clear();
 
@@ -322,7 +370,8 @@ class _ChatRoomState extends State<ChatRoom> {
             "time": DateTime.now(),
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
             'content': content,
-            'type': type
+            'type': type,
+            'ctype': ctype
           },
         );
       });
@@ -334,21 +383,19 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   Future uploadImageToFirebase() async {
-    File? fileName = imageUrl;
-    var uuid = Uuid();
-    firebase_storage.Reference firebaseStorageRef = firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('messages/images+${uuid.v4()}');
-    firebase_storage.UploadTask uploadTask =
-        firebaseStorageRef.putFile(fileName!);
-    firebase_storage.TaskSnapshot taskSnapshot =
-        await uploadTask.whenComplete(() async {
-      print(fileName);
-      String img = await uploadTask.snapshot.ref.getDownloadURL();
-      setState(() {
-        imageLink = img;
-      });
+    final path = 'files/${pickedFIle!.name}';
+    final file = File(pickedFIle!.path!);
+    firebase_storage.Reference firebaseStorageRef =
+        firebase_storage.FirebaseStorage.instance.ref().child(path);
+    //.child('messages/images+${uuid.v4()}${file}');
+    firebase_storage.UploadTask uploadTask = firebaseStorageRef.putFile(file);
+
+    final snapshot = await uploadTask.whenComplete(() {});
+    final downloadlink = await snapshot.ref.getDownloadURL();
+    print(downloadlink);
+    String img = await uploadTask.snapshot.ref.getDownloadURL();
+    setState(() {
+      imageLink = img;
     });
   }
 }

@@ -25,7 +25,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
         child: FirebaseAuth.instance.currentUser != null
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('appointments')
+                    .collection('doctor_appointment')
                     .doc("details")
                     .collection("records")
                     .where(
@@ -88,7 +88,6 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                                           'date'],
                                                                       name: documentSnapshot[
                                                                           'name'],
-                                                                     
                                                                       problem:
                                                                           documentSnapshot[
                                                                               'problem'],
