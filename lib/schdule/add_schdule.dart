@@ -83,8 +83,7 @@ class _AddSchduleState extends State<AddSchdule> {
             margin: EdgeInsets.only(left: 10, right: 10),
             child: Center(
               child: TextField(
-                controller:
-                    timeController, //editing controller of this TextField
+                controller: endtime, //editing controller of this TextField
                 decoration: InputDecoration(
                     icon: Icon(Icons.timer), //icon of text field
                     labelText:

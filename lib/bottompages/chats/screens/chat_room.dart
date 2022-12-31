@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:practo_doctor/widgets/firebase_api.dart';
-import 'package:practo_doctor/widgets/hospital_video_call.dart';
+import 'package:practo_doctor/widgets/doctor_video_call.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
