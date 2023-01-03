@@ -1,12 +1,14 @@
+import 'package:practo_doctor/bottompages/chats/screens/all_chat_past.dart';
+
 import '../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
+class AllPastChatPage extends StatelessWidget {
   final doctorid;
   final userid;
   final name;
 
-  ChatPage({Key? key, this.doctorid, this.userid, this.name})
+  AllPastChatPage({Key? key, this.doctorid, this.userid, this.name})
       : super(
           key: key,
         );
@@ -15,7 +17,7 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: AllChats(
+      body: AllChatsPast(
         doctorid: doctorid,
         name: name,
         userid: userid,

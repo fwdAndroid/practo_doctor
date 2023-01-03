@@ -102,7 +102,7 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                   await FirebaseFirestore
                                                       .instance
                                                       .collection(
-                                                          'appointments')
+                                                          'doctor_appointment')
                                                       .doc("details")
                                                       .collection("records")
                                                       .doc(documentSnapshot.id)

@@ -15,12 +15,12 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 
-class ChatRoom extends StatefulWidget {
+class PastChatRoom extends StatefulWidget {
   String doctorId;
   String doctorName;
   String paitientname;
   String paitientid;
-  ChatRoom({
+  PastChatRoom({
     Key? key,
     required this.paitientid,
     required this.paitientname,
@@ -29,10 +29,10 @@ class ChatRoom extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ChatRoom> createState() => _ChatRoomState();
+  State<PastChatRoom> createState() => _PastChatRoomState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
+class _PastChatRoomState extends State<PastChatRoom> {
   String groupChatId = "";
   ScrollController scrollController = ScrollController();
   final ImagePicker _picker = ImagePicker();
@@ -91,22 +91,6 @@ class _ChatRoomState extends State<ChatRoom> {
               ),
             ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => DoctorVideoChat(
-                                callingId: widget.doctorId,
-                                paitientname: widget.paitientname,
-                              )));
-                },
-                icon: Icon(
-                  Icons.video_call,
-                  color: Colors.blue,
-                ))
-          ],
         ),
         body: Container(
           child: Stack(
@@ -371,95 +355,6 @@ class _ChatRoomState extends State<ChatRoom> {
                       return Center(child: CircularProgressIndicator());
                     }
                   }),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  height: 60,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 100,
-                                child: AlertDialog(
-                                  title: new Text("Welcome Practo"),
-                                  content: Container(
-                                    height: 100,
-                                    child: Column(
-                                      children: [
-                                        new TextButton(
-                                            onPressed: addImage,
-                                            child: Text("Upload Image")),
-                                        new TextButton(
-                                            onPressed: uploadFile,
-                                            child: Text("Upload File")),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    new ElevatedButton(
-                                      child: new Text("OK"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: messageController,
-                          decoration: InputDecoration(
-                              hintText: "Write message...",
-                              hintStyle: TextStyle(color: Colors.black54),
-                              border: InputBorder.none),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          sendMessage(messageController.text.trim(), 0);
-                        },
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                        backgroundColor: Colors.blue,
-                        elevation: 0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ));

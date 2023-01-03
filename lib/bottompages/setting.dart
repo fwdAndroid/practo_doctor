@@ -195,14 +195,14 @@ class _SettingState extends State<Setting> {
                 indent: 15,
                 endIndent: 15,
               ),
-              zisttile('Logout', Icons.login_outlined, () async {
-                await FirebaseAuth.instance.signOut().then((value) => {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => MainAuth()))
-                    });
-              })
+              // zisttile('Logout', Icons.login_outlined, () async {
+              //   await FirebaseAuth.instance.signOut().then((value) => {
+              //         Navigator.pushReplacement(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (builder) => MainAuth()))
+              //       });
+              // })
             ],
           ),
         ));

@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:practo_doctor/bottompages/chats/screens/past_chat_room.dart';
 import '../screens/chat_room.dart';
 import 'package:flutter/material.dart';
 
 import '../app_theme.dart';
 
-class AllChats extends StatefulWidget {
+class AllChatsPast extends StatefulWidget {
   final userid;
   final doctorid;
   final name;
-  AllChats({required this.doctorid, required this.userid, required this.name});
+  AllChatsPast(
+      {required this.doctorid, required this.userid, required this.name});
   @override
-  State<AllChats> createState() => _AllChatsState();
+  State<AllChatsPast> createState() => _AllChatsPastState();
 }
 
-class _AllChatsState extends State<AllChats> {
+class _AllChatsPastState extends State<AllChatsPast> {
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +39,7 @@ class _AllChatsState extends State<AllChats> {
                     .collection("doctor_appointment")
                     .doc("details")
                     .collection("records")
-                    .where("status", isEqualTo: "start")
+                    .where("status", isEqualTo: "complete")
                     .where("doctorid",
                         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(includeMetadataChanges: true),
@@ -62,7 +64,7 @@ class _AllChatsState extends State<AllChats> {
                             onTap: () {
                               Navigator.push(context,
                                   CupertinoPageRoute(builder: (context) {
-                                return ChatRoom(
+                                return PastChatRoom(
                                   doctorName: documentSnapshot['doctorName'],
                                   paitientid: documentSnapshot['id'],
                                   doctorId: documentSnapshot['doctorid'],
