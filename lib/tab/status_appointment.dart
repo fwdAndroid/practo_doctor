@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:practo_doctor/bottompages/chats/screens/chat_page.dart';
+import 'package:practo_doctor/bottompages/chat/history/chat_page.dart';
 import 'package:practo_doctor/view_detail/view_detail.dart';
 import 'package:uuid/uuid.dart';
 
@@ -109,6 +109,8 @@ class _StatusAppointmentState extends State<StatusAppointment> {
                                                       .update({
                                                     "status": "start"
                                                   }).whenComplete(() {
+                                                    print(
+                                                        documentSnapshot["id"]);
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:practo_doctor/bottompages/chats/screens/all_past_chat_page.dart';
-import 'package:practo_doctor/bottompages/chats/screens/chat_page.dart';
+import 'package:practo_doctor/bottompages/chat/history/chat_page.dart';
+import 'package:practo_doctor/bottompages/chat/history/past_chat.dart';
 
 class DoctorChatAppointment extends StatefulWidget {
   const DoctorChatAppointment({super.key});
@@ -18,7 +18,7 @@ class _DoctorChatAppointmentState extends State<DoctorChatAppointment>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -49,8 +49,12 @@ class _DoctorChatAppointmentState extends State<DoctorChatAppointment>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          ChatPage(doctorid: FirebaseAuth.instance.currentUser!.uid),
-          AllPastChatPage(doctorid: FirebaseAuth.instance.currentUser!.uid),
+          ChatPage(
+            doctorid: "",
+            name: "",
+            userid: "",
+          ),
+          PastChat(),
         ],
       ),
     );

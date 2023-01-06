@@ -5,22 +5,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:practo_doctor/bottompages/chat/videocall/doctor_video_call.dart';
 import 'package:practo_doctor/widgets/firebase_api.dart';
-import 'package:practo_doctor/widgets/doctor_video_call.dart';
 import 'package:practo_doctor/widgets/full_photo_page.dart';
+
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 
-class ChatRoom extends StatefulWidget {
+class CurrentChatRoom extends StatefulWidget {
   String doctorId;
   String doctorName;
   String paitientname;
   String paitientid;
-  ChatRoom({
+  CurrentChatRoom({
     Key? key,
     required this.paitientid,
     required this.paitientname,
@@ -29,10 +27,10 @@ class ChatRoom extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ChatRoom> createState() => _ChatRoomState();
+  State<CurrentChatRoom> createState() => _CurrentChatRoomState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
+class _CurrentChatRoomState extends State<CurrentChatRoom> {
   String groupChatId = "";
   ScrollController scrollController = ScrollController();
   final ImagePicker _picker = ImagePicker();
@@ -40,7 +38,7 @@ class _ChatRoomState extends State<ChatRoom> {
   PlatformFile? platformFile;
   UploadTask? task;
   File? file;
-  Reference reference = FirebaseStorage.instance.ref();
+
   TextEditingController messageController = TextEditingController();
   String? imageLink, fileLink;
   firebase_storage.UploadTask? uploadTask;
@@ -49,7 +47,7 @@ class _ChatRoomState extends State<ChatRoom> {
   void initState() {
     // TODO: implement initState
     if (FirebaseAuth.instance.currentUser!.uid.hashCode <=
-        widget.doctorId.hashCode) {
+        widget.paitientid.hashCode) {
       groupChatId =
           "${FirebaseAuth.instance.currentUser!.uid}-${widget.paitientid}";
     } else {
@@ -63,6 +61,8 @@ class _ChatRoomState extends State<ChatRoom> {
   String myStatus = "";
   @override
   Widget build(BuildContext context) {
+    print(widget.doctorId);
+    print(widget.paitientid);
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
 
     return Scaffold(
@@ -97,7 +97,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (builder) => DoctorVideoChat(
+                          builder: (builder) => DoctorVideoCall(
                                 callingId: widget.doctorId,
                                 paitientname: widget.paitientname,
                               )));
@@ -233,35 +233,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                                         : Container(),
                                                   ]),
                                                 ),
-                                                Positioned(
-                                                  top: 12,
-                                                  right: 17,
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        print("s");
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                color: Colors
-                                                                    .grey),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4.0),
-                                                          child: Icon(
-                                                            Icons.download,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
                                               ],
                                             )
                                           : ds.get("type") == 2
@@ -334,9 +305,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                                         child: InkWell(
                                                           onTap: () {
                                                             print("object");
-                                                            // downloadFile(
-                                                            //     reference,
-                                                            //     context);
                                                           },
                                                           child: Container(
                                                             decoration:
@@ -510,7 +478,8 @@ class _ChatRoomState extends State<ChatRoom> {
     var uuid = Uuid();
 
     final fileName = basename(file!.path);
-    final destination = 'files/$fileName+${uuid.v4()}}';
+    final destination =
+        'messages/${FirebaseAuth.instance.currentUser!.uid}/images+${uuid.v4()}}';
 
     task = FirebaseApi.uploadFile(destination, file!);
     setState(() {
@@ -571,10 +540,9 @@ class _ChatRoomState extends State<ChatRoom> {
   Future uploadImageToFirebase() async {
     File? fileName = imageUrl;
     var uuid = Uuid();
-    firebase_storage.Reference firebaseStorageRef = firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('messages/images+${uuid.v4()}');
+    firebase_storage.Reference firebaseStorageRef =
+        firebase_storage.FirebaseStorage.instance.ref().child(
+            'messages/${FirebaseAuth.instance.currentUser!.uid}/images+${uuid.v4()}');
     firebase_storage.UploadTask uploadTask =
         firebaseStorageRef.putFile(fileName!);
     firebase_storage.TaskSnapshot taskSnapshot =
@@ -619,31 +587,4 @@ class _ChatRoomState extends State<ChatRoom> {
       messageController.clear();
     });
   }
-
-  //Download
-  // void downloadFile(Reference ref, BuildContext context) async {
-  //   final url = await ref.getDownloadURL();
-  //   final tempDir = await getTemporaryDirectory();
-  //   final path = '${tempDir.path}/${ref.name}';
-  //   await Dio().download(
-  //     url,
-  //     path,
-  //     // onReceiveProgress: (count, total) {
-  //     //   double progress = count / total;
-  //     //   setState(() {
-  //     //     downloadProgress[index] = progress;
-  //     //   });
-  //     // },
-  //   );
-
-  //   if (url.contains('.mp4')) {
-  //     await GallerySaver.saveVideo(path, toDcim: true);
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Downloading Complete to Gallery")));
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Downloading Failed to Gallery")));
-  //   }
-  // }
-
 }

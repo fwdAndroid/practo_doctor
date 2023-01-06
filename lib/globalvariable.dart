@@ -6,9 +6,8 @@
 // import 'package:instagram/screens/search_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:practo_doctor/bottompages/chats/screens/chat_history/chat_history.dart';
+import 'package:practo_doctor/bottompages/chat/doctor_chat_appointment.dart';
 import 'package:practo_doctor/bottompages/doctor_details.dart';
-import 'package:practo_doctor/bottompages/chats/screens/chat_page.dart';
 import 'package:practo_doctor/bottompages/home.dart';
 import 'package:practo_doctor/bottompages/setting.dart';
 
