@@ -8,22 +8,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:practo_doctor/bottompages/chat/videocall/doctor_video_call.dart';
 import 'package:practo_doctor/widgets/firebase_api.dart';
 import 'package:practo_doctor/widgets/full_photo_page.dart';
-
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
 
 class CurrentChatRoom extends StatefulWidget {
+  String receiverId;
+  String receiverName;
   String doctorId;
   String doctorName;
-  String paitientname;
-  String paitientid;
   CurrentChatRoom({
     Key? key,
-    required this.paitientid,
-    required this.paitientname,
+    required this.receiverName,
     required this.doctorId,
     required this.doctorName,
+    required this.receiverId,
   }) : super(key: key);
 
   @override
@@ -47,13 +46,19 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
   void initState() {
     // TODO: implement initState
     if (FirebaseAuth.instance.currentUser!.uid.hashCode <=
-        widget.paitientid.hashCode) {
+        widget.receiverId.hashCode) {
       groupChatId =
-          "${FirebaseAuth.instance.currentUser!.uid}-${widget.paitientid}";
+          "${FirebaseAuth.instance.currentUser!.uid}-${widget.receiverId}";
     } else {
       groupChatId =
-          "${widget.paitientid}-${FirebaseAuth.instance.currentUser!.uid}";
+          "${widget.receiverId}-${FirebaseAuth.instance.currentUser!.uid}";
     }
+    // firebaseFirestore.collection("users").doc(widget.receiverId).get().then((value) {
+    //   setState(() {
+    //     receiverimageLink= value.get("imageLink");
+    //     receiverName=value.get("UserName");
+    //   });
+    // });
 
     super.initState();
   }
@@ -61,378 +66,321 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
   String myStatus = "";
   @override
   Widget build(BuildContext context) {
-    print(widget.doctorId);
-    print(widget.paitientid);
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
-
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          backgroundColor: Colors.white,
-          title: Column(
-            children: [
-              Text(
-                widget.doctorName,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                widget.paitientname,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => DoctorVideoCall(
-                                callingId: widget.doctorId,
-                                paitientname: widget.paitientname,
-                              )));
-                },
-                icon: Icon(
-                  Icons.video_call,
-                  color: Colors.blue,
-                ))
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Column(
+          children: [
+            Text(
+              widget.doctorName,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            Text(
+              widget.receiverName,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
+            ),
           ],
         ),
-        body: Container(
-          child: Stack(
-            children: <Widget>[
-              StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection("messages")
-                      .doc(groupChatId)
-                      .collection(groupChatId)
-                      .orderBy("timestamp", descending: false)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data!.docs == 0
-                          ? Center(child: Text("Empty "))
-                          : SingleChildScrollView(
-                              child: ListView.builder(
-                                controller: scrollController,
-                                itemCount: snapshot.data!.docs.length,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(top: 10, bottom: 10),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  var ds = snapshot.data!.docs[index];
-                                  return ds.get("type") == 0
-                                      ? Container(
-                                          padding: EdgeInsets.only(
-                                              left: 14,
-                                              right: 14,
-                                              top: 10,
-                                              bottom: 10),
-                                          child: Align(
-                                            alignment: (ds.get("senderId") ==
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => DoctorVideoCall(
+                              callingId: widget.receiverId,
+                              paitientname: widget.receiverName,
+                            )));
+              },
+              icon: Icon(
+                Icons.video_call,
+                color: Colors.blue,
+              ))
+        ],
+      ),
+      body: Container(
+        child: Stack(
+          children: <Widget>[
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("messages")
+                    .doc(groupChatId)
+                    .collection(groupChatId)
+                    .orderBy("timestamp", descending: false)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!.docs == 0
+                        ? Center(child: Text("Empty "))
+                        : ListView.builder(
+                            controller: scrollController,
+                            itemCount: snapshot.data!.docs.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              var ds = snapshot.data!.docs[index];
+                              return ds.get("type") == 0
+                                  ? Container(
+                                      padding: EdgeInsets.only(
+                                          left: 14,
+                                          right: 14,
+                                          top: 10,
+                                          bottom: 10),
+                                      child: Align(
+                                        alignment: (ds.get("senderId") ==
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid
+                                            ? Alignment.bottomRight
+                                            : Alignment.bottomLeft),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: (ds.get("senderId") ==
                                                     FirebaseAuth.instance
                                                         .currentUser!.uid
-                                                ? Alignment.bottomRight
-                                                : Alignment.bottomLeft),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: (ds.get("senderId") ==
-                                                        FirebaseAuth.instance
-                                                            .currentUser!.uid
-                                                    ? Colors.grey.shade200
-                                                    : Colors.blue[200]),
+                                                ? Colors.grey.shade200
+                                                : Colors.blue[200]),
+                                          ),
+                                          padding: EdgeInsets.all(16),
+                                          child: Text(
+                                            ds.get("content"),
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : ds.get("type") == 1
+                                      ? InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (builder) =>
+                                                        FullPhotoPage(
+                                                          url: ds.get("image"),
+                                                        )));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 14,
+                                                    right: 14,
+                                                    top: 10,
+                                                    bottom: 10),
+                                                child: Align(
+                                                  alignment: (ds.get(
+                                                              "senderId") ==
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid
+                                                      ? Alignment.bottomRight
+                                                      : Alignment.bottomLeft),
+                                                  child: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.2,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.4,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                            ds.get("image"),
+                                                          ),
+                                                          fit: BoxFit.fill),
+                                                      // color: (ds.get("senderId") == firebaseAuth.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
+                                                    ),
+                                                    // padding: EdgeInsets.all(16),
+                                                  ),
+                                                ),
                                               ),
-                                              padding: EdgeInsets.all(16),
-                                              child: Text(
-                                                ds.get("content"),
-                                                style: TextStyle(fontSize: 15),
-                                              ),
-                                            ),
+                                              task != null
+                                                  ? buildUploadStatus(task!)
+                                                  : Container(),
+                                            ],
                                           ),
                                         )
-                                      : ds.get("type") == 1
-                                          ? Stack(
+                                      : ds.get("type") == 2
+                                          ? Column(
                                               children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (builder) =>
-                                                                FullPhotoPage(
-                                                                  url: ds.get(
-                                                                      "image"),
-                                                                )));
-                                                  },
-                                                  child: Column(children: [
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: 14,
-                                                          right: 14,
-                                                          top: 10,
-                                                          bottom: 10),
-                                                      child: Align(
-                                                        alignment: (ds.get(
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 14,
+                                                      right: 14,
+                                                      top: 10,
+                                                      bottom: 10),
+                                                  child: Align(
+                                                    alignment: (ds.get(
+                                                                "senderId") ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid
+                                                        ? Alignment.bottomRight
+                                                        : Alignment.bottomLeft),
+                                                    child: Container(
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        color: (ds.get(
                                                                     "senderId") ==
                                                                 FirebaseAuth
                                                                     .instance
                                                                     .currentUser!
                                                                     .uid
-                                                            ? Alignment
-                                                                .bottomRight
-                                                            : Alignment
-                                                                .bottomLeft),
-                                                        child: Container(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.2,
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.4,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            image:
-                                                                DecorationImage(
-                                                                    image:
-                                                                        NetworkImage(
-                                                                      ds.get(
-                                                                          "image"),
-                                                                    ),
-                                                                    fit: BoxFit
-                                                                        .fill),
-                                                            // color: (ds.get("senderId") == FirebaseAuth.instance.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
-                                                          ),
-                                                          // padding: EdgeInsets.all(16),
+                                                            ? Colors
+                                                                .grey.shade200
+                                                            : Colors.blue[200]),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          ds
+                                                              .get("file")
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                          textAlign:
+                                                              TextAlign.left,
                                                         ),
                                                       ),
                                                     ),
-                                                    task != null
-                                                        ? buildUploadStatus(
-                                                            task!)
-                                                        : Container(),
-                                                  ]),
+                                                  ),
                                                 ),
+                                                task != null
+                                                    ? buildUploadStatus(task!)
+                                                    : Container(),
                                               ],
                                             )
-                                          : ds.get("type") == 2
-                                              ? Stack(
-                                                  children: [
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: 14,
-                                                          right: 14,
-                                                          top: 10,
-                                                          bottom: 10),
-                                                      child: Align(
-                                                        alignment: (ds.get(
-                                                                    "senderId") ==
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid
-                                                            ? Alignment
-                                                                .bottomRight
-                                                            : Alignment
-                                                                .bottomLeft),
-                                                        child: Container(
-                                                          height: 60,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            color: (ds.get(
-                                                                        "senderId") ==
-                                                                    FirebaseAuth
-                                                                        .instance
-                                                                        .currentUser!
-                                                                        .uid
-                                                                ? Colors.grey
-                                                                    .shade200
-                                                                : Colors
-                                                                    .blue[200]),
-                                                          ),
-                                                          child: Center(
-                                                            child: Text(
-                                                              ds
-                                                                  .get("file")
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    task != null
-                                                        ? buildUploadStatus(
-                                                            task!)
-                                                        : Container(),
-                                                    Positioned(
-                                                      top: 12,
-                                                      right: 17,
-                                                      child: Align(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            print("object");
-                                                          },
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: Colors
-                                                                        .grey),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
-                                                              child: Icon(
-                                                                Icons.download,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                },
-                              ),
-                            );
-                    } else if (snapshot.hasError) {
-                      return Center(child: Icon(Icons.error_outline));
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  }),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  height: 60,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 100,
-                                child: AlertDialog(
-                                  title: new Text("Welcome Practo"),
-                                  content: Container(
-                                    height: 100,
-                                    child: Column(
-                                      children: [
-                                        new TextButton(
-                                            onPressed: addImage,
-                                            child: Text("Upload Image")),
-                                        new TextButton(
-                                            onPressed: uploadFile,
-                                            child: Text("Upload File")),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    new ElevatedButton(
-                                      child: new Text("OK"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
+                                          : Container();
                             },
                           );
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                  } else if (snapshot.hasError) {
+                    return Center(child: Icon(Icons.error_outline));
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                height: 60,
+                width: double.infinity,
+                color: Colors.white,
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 100,
+                              child: AlertDialog(
+                                title: new Text("Welcome Practo"),
+                                content: Container(
+                                  height: 100,
+                                  child: Column(
+                                    children: [
+                                      new TextButton(
+                                          onPressed: addImage,
+                                          child: Text("Upload Image")),
+                                      new TextButton(
+                                          onPressed: uploadFile,
+                                          child: Text("Upload File")),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  new ElevatedButton(
+                                    child: new Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: messageController,
-                          decoration: InputDecoration(
-                              hintText: "Write message...",
-                              hintStyle: TextStyle(color: Colors.black54),
-                              border: InputBorder.none),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          sendMessage(messageController.text.trim(), 0);
-                        },
                         child: Icon(
-                          Icons.send,
+                          Icons.add,
                           color: Colors.white,
-                          size: 18,
+                          size: 20,
                         ),
-                        backgroundColor: Colors.blue,
-                        elevation: 0,
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: messageController,
+                        decoration: InputDecoration(
+                            hintText: "Write message...",
+                            hintStyle: TextStyle(color: Colors.black54),
+                            border: InputBorder.none),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    FloatingActionButton(
+                      onPressed: () {
+                        sendMessage(messageController.text.trim(), 0);
+                      },
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      backgroundColor: Colors.blue,
+                      elevation: 0,
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  //Functions
 
   void sendMessage(String content, int type) {
     // type: 0 = text, 1 = image, 2 = sticker
@@ -450,7 +398,7 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
           documentReference,
           {
             "senderId": FirebaseAuth.instance.currentUser!.uid,
-            "receiverId": widget.doctorId,
+            "receiverId": widget.receiverId,
             "time": DateTime.now(),
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
             'content': content,
@@ -502,7 +450,7 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
         documentReference,
         {
           "senderId": FirebaseAuth.instance.currentUser!.uid,
-          "reciverId": widget.doctorId,
+          "reciverId": widget.receiverId,
           // "content": messageController.text,
           "time": DateTime.now(),
           'image': "",
@@ -571,7 +519,7 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
           documentReference,
           {
             "senderId": FirebaseAuth.instance.currentUser!.uid,
-            "reciverId": widget.doctorId,
+            "reciverId": widget.receiverId,
             // "content": messageController.text,
             "time": DateTime.now(),
             'image': imageLink,

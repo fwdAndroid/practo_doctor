@@ -65,9 +65,9 @@ class _ChatPageState extends State<ChatPage> {
                                     builder: (context) => CurrentChatRoom(
                                       doctorName:
                                           documentSnapshot['doctorName'],
-                                      paitientid: documentSnapshot['id'],
+                                      receiverId: documentSnapshot['id'],
                                       doctorId: documentSnapshot['doctorid'],
-                                      paitientname: documentSnapshot['name'],
+                                      receiverName: documentSnapshot['name'],
                                     ),
                                   ),
                                 );
