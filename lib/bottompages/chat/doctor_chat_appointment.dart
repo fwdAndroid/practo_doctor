@@ -54,7 +54,11 @@ class _DoctorChatAppointmentState extends State<DoctorChatAppointment>
             name: "",
             userid: "",
           ),
-          PastChat(),
+          PastChat(
+            doctorid: "",
+            name: "",
+            userid: "",
+          ),
         ],
       ),
     );
