@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:practo_doctor/bottompages/chat/videocall/doctor_video_call.dart';
+import 'package:practo_doctor/widgets/file_preview.dart';
 import 'package:practo_doctor/widgets/firebase_api.dart';
 import 'package:practo_doctor/widgets/full_photo_page.dart';
 import 'package:uuid/uuid.dart';
@@ -37,6 +39,7 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
   PlatformFile? platformFile;
   UploadTask? task;
   File? file;
+  bool _isLoading = false;
 
   TextEditingController messageController = TextEditingController();
   String? imageLink, fileLink;
@@ -124,13 +127,14 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     return snapshot.data!.docs == 0
-                        ? Center(child: Text("Empty "))
+                        ? Center(child: CircularProgressIndicator.adaptive())
                         : ListView.builder(
+                            reverse: false,
                             controller: scrollController,
                             itemCount: snapshot.data!.docs.length,
                             shrinkWrap: true,
                             padding: EdgeInsets.only(top: 10, bottom: 10),
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: AlwaysScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               var ds = snapshot.data!.docs[index];
                               return ds.get("type") == 0
@@ -205,14 +209,19 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               20),
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                            ds.get("image"),
-                                                          ),
-                                                          fit: BoxFit.fill),
-                                                      // color: (ds.get("senderId") == firebaseAuth.currentUser!.uid?Colors.grey.shade200:Colors.blue[200]),
                                                     ),
                                                     // padding: EdgeInsets.all(16),
+                                                    child: CachedNetworkImage(
+                                                      fit: BoxFit.cover,
+                                                      height: 200,
+                                                      imageUrl: ds.get("image"),
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          new CircularProgressIndicator(),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          new Icon(Icons.error),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -225,50 +234,74 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
                                       : ds.get("type") == 2
                                           ? Column(
                                               children: [
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 14,
-                                                      right: 14,
-                                                      top: 10,
-                                                      bottom: 10),
-                                                  child: Align(
-                                                    alignment: (ds.get(
-                                                                "senderId") ==
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser!
-                                                                .uid
-                                                        ? Alignment.bottomRight
-                                                        : Alignment.bottomLeft),
-                                                    child: Container(
-                                                      height: 60,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: (ds.get(
-                                                                    "senderId") ==
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid
-                                                            ? Colors
-                                                                .grey.shade200
-                                                            : Colors.blue[200]),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          ds
-                                                              .get("file")
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                          textAlign:
-                                                              TextAlign.left,
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 14,
+                                                        right: 14,
+                                                        top: 10,
+                                                        bottom: 10),
+                                                    child: Align(
+                                                      alignment: (ds.get(
+                                                                  "senderId") ==
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid
+                                                          ? Alignment
+                                                              .bottomRight
+                                                          : Alignment
+                                                              .bottomLeft),
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            1.2,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          color: (ds.get(
+                                                                      "senderId") ==
+                                                                  FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser!
+                                                                      .uid
+                                                              ? Colors
+                                                                  .grey.shade200
+                                                              : Colors
+                                                                  .blue[200]),
                                                         ),
+                                                        child: _isLoading
+                                                            ? CircularProgressIndicator()
+                                                            : Container(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          3.0),
+                                                                  child: Text(
+                                                                    ds
+                                                                        .get(
+                                                                            "file")
+                                                                        .toString(),
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                  ),
+                                                                ),
+                                                              ),
                                                       ),
                                                     ),
                                                   ),
@@ -298,37 +331,40 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        showDialog(
+                        showModalBottomSheet<void>(
                           context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 100,
-                              child: AlertDialog(
-                                title: new Text("Welcome Practo"),
-                                content: Container(
-                                  height: 100,
-                                  child: Column(
-                                    children: [
-                                      new TextButton(
-                                          onPressed: addImage,
-                                          child: Text("Upload Image")),
-                                      new TextButton(
-                                          onPressed: uploadFile,
-                                          child: Text("Upload File")),
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  new ElevatedButton(
-                                    child: new Text("OK"),
+                          builder: (BuildContext context) => SafeArea(
+                            child: SizedBox(
+                              height: 144,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop();
+                                      Navigator.pop(context);
+                                      addImage();
                                     },
+                                    child: const Align(
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                      child: Text('Photo'),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      uploadFile();
+                                    },
+                                    child: const Align(
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                      child: Text('File'),
+                                    ),
                                   ),
                                 ],
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         );
                       },
                       child: Container(
@@ -504,7 +540,11 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
   }
 
   void addImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+      maxWidth: 1440,
+    );
     setState(() {
       imageUrl = File(image!.path);
     });

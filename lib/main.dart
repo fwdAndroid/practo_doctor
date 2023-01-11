@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:practo_doctor/bottom.dart';
 import 'package:practo_doctor/splash.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(
     MyApp(),
   );
 }
 
 // namecontroller.text = doc['dasd'];  For SHowing Data on UPdate
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
