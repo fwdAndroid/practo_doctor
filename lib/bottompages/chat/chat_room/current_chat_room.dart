@@ -235,7 +235,16 @@ class _CurrentChatRoomState extends State<CurrentChatRoom> {
                                           ? Column(
                                               children: [
                                                 InkWell(
-                                                  onTap: () {},
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (builder) =>
+                                                                FilePreview(
+                                                                    filePreview:
+                                                                        ds.get(
+                                                                            "file"))));
+                                                  },
                                                   child: Container(
                                                     padding: EdgeInsets.only(
                                                         left: 14,
